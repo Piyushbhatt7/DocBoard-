@@ -7,7 +7,7 @@ class AuthRepository {
 
   void signInWithGoogle() async {
 
-    
+     
   }
 
 }
