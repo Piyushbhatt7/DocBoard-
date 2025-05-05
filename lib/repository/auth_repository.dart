@@ -5,4 +5,9 @@ class AuthRepository {
 
   AuthRepository({required GoogleSignIn googleSignIn}) : _googleSignIn = googleSignIn;
 
+  void signInWithGoogle() async {
+
+    
+  }
+
 }
