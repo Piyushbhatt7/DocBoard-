@@ -1,4 +1,4 @@
-package com.example.google_docs
+package com.example.doc_board
 
 import io.flutter.embedding.android.FlutterActivity
 
