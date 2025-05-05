@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_docs/colors.dart';
 
 class LoginScree extends StatefulWidget {
   const LoginScree({super.key});
@@ -18,9 +19,21 @@ class _LoginScreeState extends State<LoginScree> {
             'assets/images/g-logo-2.png',
             height: 20,
           ),
-          label: const Text("Sign in with Google"),
+          label: const Text(
+            "Sign in with Google", 
+            style: TextStyle(
+            color: kBlackColor
+          ),),
           style: ElevatedButton.styleFrom(
-            
+            backgroundColor: kWhiteColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: const BorderSide(
+                color: Colors.grey,
+                width: 1.5
+              )
+            ),
+           minimumSize: const Size(150, 50)
           ),
           ),
       ),
