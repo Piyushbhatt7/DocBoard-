@@ -10,6 +10,14 @@ class LoginScree extends StatefulWidget {
 class _LoginScreeState extends State<LoginScree> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton.icon(
+          onPressed: (){}, 
+          icon: ,
+          label: label,
+          ),
+      ),
+    );
   }
 }
