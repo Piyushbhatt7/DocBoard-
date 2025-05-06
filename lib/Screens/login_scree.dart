@@ -3,16 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 
-class LoginScree extends ConsumerWidget {
+class LoginScree extends ConsumerStatefulWidget {
   const LoginScree({super.key});
 
   @override
-  State<LoginScree> createState() => _LoginScreeState();
+  ConsumerState<LoginScree> createState() => _LoginScreeState();
 }
 
-class _LoginScreeState extends State<LoginScree> {
+class _LoginScreeState extends ConsumerState<LoginScree> {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     ref.watch(authRepositoryProvider).signInWithGoogle();
     return Scaffold(
       body: Center(
