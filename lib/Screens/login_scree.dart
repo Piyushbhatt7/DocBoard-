@@ -27,7 +27,7 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
           onPressed: () => signInWithGoogle(ref),
           icon: Image.asset( 
             'assets/images/g-logo-2.png',      
-            height: 20,
+            height: 20, 
           ),
           label: const Text(
             "Sign in with Google", 
