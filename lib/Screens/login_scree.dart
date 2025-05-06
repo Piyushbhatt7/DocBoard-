@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 
-class LoginScree extends StatefulWidget {
+class LoginScree extends ConsumerWidget {
   const LoginScree({super.key});
 
   @override
