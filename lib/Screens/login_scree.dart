@@ -8,7 +8,7 @@ class LoginScree extends ConsumerStatefulWidget {
 
   void signInWithGoogle(WidgetRef ref)
   {
-    ref.watch(authRepositoryProvider).signInWithGoogle();
+    ref.read(authRepositoryProvider).signInWithGoogle();
   }
   @override   
   ConsumerState<LoginScree> createState() => _LoginScreeState();
