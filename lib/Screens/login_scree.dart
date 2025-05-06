@@ -26,7 +26,7 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
         child: ElevatedButton.icon(
           onPressed: () => signInWithGoogle(ref),
           icon: Image.asset( 
-            'assets/images/g-logo-2.png',
+            'assets/images/g-logo-2.png', 
             height: 20,
           ),
           label: const Text(
