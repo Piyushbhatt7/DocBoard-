@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
+import 'package:google_docs/repository/auth_repository.dart';
 
 class LoginScree extends ConsumerWidget {
   const LoginScree({super.key});
@@ -12,7 +13,7 @@ class LoginScree extends ConsumerWidget {
 class _LoginScreeState extends State<LoginScree> {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read
+    ref.watch(authRepositoryProvider).signInWithGoogle();
     return Scaffold(
       body: Center(
         child: ElevatedButton.icon(
