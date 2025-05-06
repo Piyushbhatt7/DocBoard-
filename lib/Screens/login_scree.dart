@@ -4,7 +4,7 @@ import 'package:google_docs/colors.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 
 class LoginScree extends ConsumerStatefulWidget {
-  const LoginScree({super.key});
+  const LoginScree ({Key? key})   ({super.key});
 
   @override
   ConsumerState<LoginScree> createState() => _LoginScreeState();
