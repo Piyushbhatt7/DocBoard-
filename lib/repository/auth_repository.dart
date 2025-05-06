@@ -13,7 +13,7 @@ class AuthRepository {
     }
     catch(e)
     {
-      
+      print(e);
     }
   }
 }
