@@ -1,5 +1,6 @@
 import 'package:google_sign_in/google_sign_in.dart';
 
+final authRepositoryProvider = 
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
   final provider
