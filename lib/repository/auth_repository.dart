@@ -10,6 +10,12 @@ class AuthRepository {
 
     try{
       final user = await _googleSignIn.signIn();
+      if(user!=null)
+      {
+        print(user.email);
+        print(user.displayName);
+        
+      }
     }
     catch(e)
     {
