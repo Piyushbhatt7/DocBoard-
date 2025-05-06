@@ -9,7 +9,7 @@ class AuthRepository {
   void signInWithGoogle() async {
 
     try{
-
+      _googleSignIn.signIn();
     }
     catch(e)
     {
