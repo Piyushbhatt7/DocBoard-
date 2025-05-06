@@ -5,6 +5,7 @@ final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
     googleSignIn: GoogleSignIn()
     ));
+
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
   final provider
