@@ -17,7 +17,7 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
   {
     ref.read(authRepositoryProvider).signInWithGoogle();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     ref.watch(authRepositoryProvider).signInWithGoogle();
@@ -25,7 +25,7 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
       body: Center(
         child: ElevatedButton.icon(
           onPressed: () => signInWithGoogle(ref),
-          icon: Image.asset(
+          icon: Image.asset( 
             'assets/images/g-logo-2.png',
             height: 20,
           ),
