@@ -21,7 +21,7 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
     return Scaffold(
       body: Center(
         child: ElevatedButton.icon(
-          onPressed: () 
+          onPressed: () => signInWithGoogle
           icon: Image.asset(
             'assets/images/g-logo-2.png',
             height: 20,
