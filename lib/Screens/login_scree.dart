@@ -6,6 +6,7 @@ import 'package:google_docs/repository/auth_repository.dart';
 class LoginScree extends ConsumerStatefulWidget {
   const LoginScree ({Key? key}) : super(key: key);
 
+  void signInWithGoogle(WidgetRef)
   @override   
   ConsumerState<LoginScree> createState() => _LoginScreeState();
 }
