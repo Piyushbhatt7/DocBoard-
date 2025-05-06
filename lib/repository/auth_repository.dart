@@ -14,7 +14,7 @@ class AuthRepository {
       {
         print(user.email);
         print(user.displayName);
-        
+        print(user.photoUrl);
       }
     }
     catch(e)
