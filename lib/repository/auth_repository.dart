@@ -7,6 +7,9 @@ class AuthRepository {
     : _googleSignIn = googleSignIn;
 
   void signInWithGoogle() async {
-    
+
+    try{
+      
+    }
   }
 }
