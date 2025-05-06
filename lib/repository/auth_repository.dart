@@ -9,6 +9,10 @@ class AuthRepository {
   void signInWithGoogle() async {
 
     try{
+
+    }
+    catch(e)
+    {
       
     }
   }
