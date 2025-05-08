@@ -11,7 +11,7 @@ class LoginScree extends ConsumerStatefulWidget {
   ConsumerState<LoginScree> createState() => _LoginScreeState();                                  
 }        
 
-class _LoginScreeState extends ConsumerState<LoginScree> {
+class _LoginScreeState extends ConsumerState<LoginScree> { 
 
   void signInWithGoogle(WidgetRef ref)
   {
