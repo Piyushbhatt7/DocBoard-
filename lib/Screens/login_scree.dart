@@ -15,7 +15,7 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
   
   void signInWithGoogle(WidgetRef ref)        
   {
-    ref.read(authRepositoryProvider).signInWithGoogle();     
+    ref.read(authRepositoryProvider).signInWithGoogle();      
   }
 
   @override
