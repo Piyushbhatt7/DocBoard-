@@ -12,6 +12,8 @@
   "dependencies": {
     "express": "^5.1.0",
     "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.2",
     "socket.io": "^2.3.0"
   }
 }
