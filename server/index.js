@@ -10,7 +10,11 @@ const DB = "";
 
 mongoose.connect(DB);
 
+// async -> await
+// .then((ref) => print(ref)
+
+
 app.listen(PORT, "0.0.0.0", () => {
     console.log('connected at port 3001');
     console.log("hey this is changing");
-})
+});
