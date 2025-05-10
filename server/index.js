@@ -11,6 +11,7 @@ const DB = "";
 mongoose.connect(DB).then(() => {
     console.log("Connection successful !");
 }).catch((err) => {
+    console.log(err);
     
 })
 
