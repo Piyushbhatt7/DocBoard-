@@ -9,7 +9,7 @@ const app = express();
 const DB = "";
 
 mongoose.connect(DB).then(() => {
-    
+    console.log("Connection successful");
 })
 
 // async -> await
