@@ -5,9 +5,9 @@ const authRouter = express.Router();
 authRouter.post('api/sinup', async (req, res) => {
 
     try {
-        const {} = req.body;
-        'name': name,
+        const {name, email, profilPic} = req.body;
         
+
     }
 
     catch (e)
