@@ -8,6 +8,8 @@ const app = express();
 
 const DB = "mongodb+srv://piyushbhatt162:0k0P2FcurljxejUR@cluster0.mrjbpoh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
+app.post('/api/signup')
+
 mongoose.connect(DB)
 .then(() => {
     console.log("Connection successful !");
