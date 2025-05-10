@@ -1,3 +1,5 @@
 const express = require("express");
 
-const app = express();
+const authRouter = express.Router();
+
+authRouter.post('api/sinup')
