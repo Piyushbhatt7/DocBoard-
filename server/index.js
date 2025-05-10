@@ -8,7 +8,7 @@ const app = express();
 
 const DB = "";
 
-mongoose.connect(DB);
+mongoose.connect(DB).then(())
 
 // async -> await
 // .then((ref) => print(ref)
