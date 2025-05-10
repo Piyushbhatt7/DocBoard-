@@ -6,10 +6,12 @@ authRouter.post('api/sinup', async (req, res) => {
 
     try {
         const {} = req.body;
+        'name': name,
+        
     }
 
     catch (e)
     {
-        
+
     }
 })
