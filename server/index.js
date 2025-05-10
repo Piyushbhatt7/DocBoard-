@@ -9,7 +9,9 @@ const app = express();
 const DB = "";
 
 mongoose.connect(DB).then(() => {
-    console.log("Connection successful");
+    console.log("Connection successful !");
+}).catch((err) => {
+    
 })
 
 // async -> await
