@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_docs/constants.dart';
 import 'package:google_docs/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
@@ -37,7 +38,7 @@ class AuthRepository {
            );
       }
 
-      _client.post()
+      _client.post('$host');
     }
     catch(e)
     {
