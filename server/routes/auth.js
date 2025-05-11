@@ -3,7 +3,7 @@ const User = require("../models/user");
 
 const authRouter = express.Router();
 
-authRouter.post('api/sinup', async (req, res) => {
+authRouter.post('/signup', async (req, res) => {
 
     try {
         const {name, email, profilePic} = req.body; // 1:10
@@ -32,7 +32,8 @@ authRouter.post('api/sinup', async (req, res) => {
 
     catch (e)
     {
-
+        console.error(e);
+        res.status(500).json({ error: 'Something went wrong.' });
     }
 });
 
