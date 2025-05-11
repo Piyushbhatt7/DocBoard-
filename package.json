@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "package_name": "^1.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
