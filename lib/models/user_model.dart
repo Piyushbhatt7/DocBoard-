@@ -1,5 +1,6 @@
-class UserModel {
+import 'dart:convert';
 
+class UserModel {
   final String id;
   final String name;
   final String profilePic;
@@ -7,11 +8,32 @@ class UserModel {
   final String token;
 
   UserModel({
-    required this.id, 
-    required this.name, 
-    required this.profilePic, 
-    required this.uid, 
-    required this.token
-    });
+    required this.id,
+    required this.name,
+    required this.profilePic,
+    required this.uid,
+    required this.token,
+  });
 
+  // From JSON to UserModel
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'],
+      name: json['name'],
+      profilePic: json['profilePic'],
+      uid: json['uid'],
+      token: json['token'],
+    );
+  }
+
+  // From UserModel to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'profilePic': profilePic,
+      'uid': uid,
+      'token': token,
+    };
+  }
 }
