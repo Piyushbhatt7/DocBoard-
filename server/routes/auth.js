@@ -24,9 +24,9 @@ authRouter.post('/signup', async (req, res) => {
         }
         // store data
 
-        res.json({
-            user: user,
-        })
+        res.status(200).json({
+            user
+        });
         // send response
     }
 
