@@ -38,7 +38,9 @@ class AuthRepository {
            );
       }
 
-      _client.post('$host');
+      _client.post(Uri.parse('$host/api/signup'),
+      body: 
+      );
     }
     catch(e)
     {
