@@ -36,6 +36,8 @@ class AuthRepository {
            id: ''
            );
       }
+
+      _client.post()
     }
     catch(e)
     {
