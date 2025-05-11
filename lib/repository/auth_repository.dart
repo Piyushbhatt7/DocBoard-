@@ -36,11 +36,12 @@ class AuthRepository {
            token: '',
            id: ''
            );
-      }
+      
 
       _client.post(Uri.parse('$host/api/signup'),
-      body: 
+      
       );
+    }
     }
     catch(e)
     {
