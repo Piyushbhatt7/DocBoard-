@@ -6,7 +6,7 @@ const authRouter = express.Router();
 authRouter.post('api/sinup', async (req, res) => {
 
     try {
-        const {name, email, profilPic} = req.body; // 1:10
+        const {name, email, profilePic} = req.body; // 1:10
         
         // email already exists?
         let user = await User.findOne({
@@ -30,4 +30,4 @@ authRouter.post('api/sinup', async (req, res) => {
     {
 
     }
-})
+});
