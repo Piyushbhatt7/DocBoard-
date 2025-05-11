@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 
 final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
-    googleSignIn: GoogleSignIn()
+    googleSignIn: GoogleSignIn(), client: null
     ));
 
 class AuthRepository {
@@ -43,6 +43,10 @@ class AuthRepository {
       headers: {
         'Content-Type': 'application/jso; charset=UTF-8',
       });
+
+      switch(res.statusCode){
+        
+      }
     }
     }
     catch(e)
