@@ -46,7 +46,7 @@ class AuthRepository {
 
       switch(res.statusCode){
         case 200:
-        final newUser = userAcc.copy
+        final newUser = userAcc.copyWith();
       }
     }
     }
