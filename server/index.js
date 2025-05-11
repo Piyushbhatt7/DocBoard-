@@ -6,6 +6,8 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
+app.use();
+
 const DB = "mongodb+srv://piyushbhatt162:0k0P2FcurljxejUR@cluster0.mrjbpoh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(DB)
