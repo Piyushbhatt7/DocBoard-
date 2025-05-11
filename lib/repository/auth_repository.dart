@@ -12,7 +12,7 @@ final authRepositoryProvider = Provider(
     client: Client(),
     ));
 
-    final userProvider = StateProvider((ref) => null);
+final userProvider = StateProvider<UserModel?>((ref) => null); // 1:47
 
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
