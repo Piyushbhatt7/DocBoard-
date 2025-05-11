@@ -7,4 +7,12 @@ const userSchema = mongoose.Schema ({
         required: true,
 
     },
+    email: {
+        type: String,
+        required: true,
+    },
+
+    profilePic: {
+        
+    }
 })
