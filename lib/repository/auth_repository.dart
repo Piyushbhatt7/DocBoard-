@@ -13,8 +13,12 @@ class AuthRepository {
   final Client _client;
   //35:44
 
-  AuthRepository({required GoogleSignIn googleSignIn, required Client client})
-    : _googleSignIn = googleSignIn;
+  AuthRepository({
+    required GoogleSignIn googleSignIn, 
+    required Client client
+    })
+    : _googleSignIn = googleSignIn,
+    _client = client;
 
 
   void signInWithGoogle() async {
