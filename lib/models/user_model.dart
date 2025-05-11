@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class UserModel {
+  final String email;
   final String id;
   final String name;
   final String profilePic;
@@ -8,6 +9,7 @@ class UserModel {
   final String token;
 
   UserModel({
+    required this.email,
     required this.id,
     required this.name,
     required this.profilePic,
