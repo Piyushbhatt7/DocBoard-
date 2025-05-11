@@ -35,3 +35,5 @@ authRouter.post('api/sinup', async (req, res) => {
 
     }
 });
+
+module.exports = authRouter;
