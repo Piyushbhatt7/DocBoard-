@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/constants.dart';
 import 'package:google_docs/models/user_model.dart';
@@ -47,7 +49,7 @@ class AuthRepository {
       switch(res.statusCode){
         case 200:
         final newUser = userAcc.copyWith(
-          uid: res.body,
+          uid: jsonDecode(res.body)['user']
         );
       }
     }
