@@ -9,7 +9,7 @@ import 'package:http/http.dart';
 final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
     googleSignIn: GoogleSignIn(), 
-    client: Client()
+    client: Client(),
     ));
 
 class AuthRepository {
@@ -53,6 +53,9 @@ class AuthRepository {
           uid: jsonDecode(res.body)['user']['_id'],
 
         );
+        break;
+        default:
+        throw 'Some error occured';
       }
     }
     }
