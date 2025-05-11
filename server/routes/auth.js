@@ -16,9 +16,9 @@ authRouter.post('api/sinup', async (req, res) => {
         if(!user)
         {
             user = new User({
-                email: email,
-                profilPic: profilePic,
-                name: name,
+                email,
+                profilePic,
+                name,
             });
             user = await user.save();
         }
