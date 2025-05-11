@@ -8,7 +8,7 @@ import 'package:http/http.dart';
 
 final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
-    googleSignIn: GoogleSignIn(), client: null
+    googleSignIn: GoogleSignIn(), client: Client()
     ));
 
 class AuthRepository {
@@ -49,7 +49,8 @@ class AuthRepository {
       switch(res.statusCode){
         case 200:
         final newUser = userAcc.copyWith(
-          uid: jsonDecode(res.body)['user']['_id']
+          uid: jsonDecode(res.body)['user']['_id'],
+
         );
       }
     }
