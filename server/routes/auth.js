@@ -1,4 +1,5 @@
 const express = require("express");
+const User = require("../models/user");
 
 const authRouter = express.Router();
 
@@ -8,7 +9,7 @@ authRouter.post('api/sinup', async (req, res) => {
         const {name, email, profilPic} = req.body; // 1:10
         
         // email already exists?
-        
+        User.
         // store data
         // send response
     }
