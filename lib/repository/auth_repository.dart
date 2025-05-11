@@ -49,7 +49,7 @@ class AuthRepository {
       switch(res.statusCode){
         case 200:
         final newUser = userAcc.copyWith(
-          uid: jsonDecode(res.body)['user']
+          uid: jsonDecode(res.body)['user']['_id']
         );
       }
     }
