@@ -9,6 +9,7 @@ final authRepositoryProvider = Provider(
 
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
+  final Client _client;
   //35:44
 
   AuthRepository({required GoogleSignIn googleSignIn})
