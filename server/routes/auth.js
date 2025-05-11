@@ -23,6 +23,10 @@ authRouter.post('api/sinup', async (req, res) => {
             user = await user.save();
         }
         // store data
+
+        res.json({
+            user: user,
+        })
         // send response
     }
 
