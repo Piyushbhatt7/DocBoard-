@@ -12,6 +12,8 @@ final authRepositoryProvider = Provider(
     client: Client(),
     ));
 
+    final userProvider = StateProvider((ref) => null);
+
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
   final Client _client;
