@@ -9,9 +9,18 @@ authRouter.post('api/sinup', async (req, res) => {
         const {name, email, profilPic} = req.body; // 1:10
         
         // email already exists?
-        let user = User.findOne({
+        let user = await User.findOne({
             email: email,
         });
+
+        if(!user)
+        {
+            user = new User({
+                email: email,
+                profilPic: profilePic,
+                name: name,
+            })
+        }
         // store data
         // send response
     }
