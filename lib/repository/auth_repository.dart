@@ -20,7 +20,14 @@ class AuthRepository {
       final user = await _googleSignIn.signIn();
       if(user!=null)
       {
-        final userAcc = UserModel(email: user.email, name: name)
+        final userAcc = UserModel(
+          email: user.email,
+           name: user.displayName!, 
+           profilePic: user.photoUrl!, 
+           uid: '', 
+           token: '',
+           id: ''
+           );
       }
     }
     catch(e)

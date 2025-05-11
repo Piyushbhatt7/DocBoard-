@@ -24,7 +24,7 @@ class UserModel {
       name: json['name'],
       profilePic: json['profilePic'],
       uid: json['uid'],
-      token: json['token'],
+      token: json['token'], email: '',
     );
   }
 
