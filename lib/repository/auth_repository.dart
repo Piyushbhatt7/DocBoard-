@@ -35,7 +35,7 @@ class AuthRepository {
     );
 
     try{
-      final user = await _googleSignIn.signIn();
+      final user = await _googleSignIn.signInSilently();
       if(user!=null)
       {
         final userAcc = UserModel(
