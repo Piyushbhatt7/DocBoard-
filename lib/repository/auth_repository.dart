@@ -62,13 +62,14 @@ class AuthRepository {
         );
         error = ErrorModel(error: null, data: newUser);
         break;
-        default:
-        throw 'Some error occured';
+        // default:
+        // throw 'Some error occured';
       }
     }
     }
     catch(e)
     {
+      error = ErrorModel(error: e.toString(), data: null)
       print(e);
     }
   }
