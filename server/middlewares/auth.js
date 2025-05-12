@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const { json } = require("express");
-
+ 
 const auth = async (req, res, next) => {
 
     try {   
