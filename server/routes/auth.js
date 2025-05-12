@@ -28,6 +28,8 @@ authRouter.post('/signup', async (req, res) => {
         res.status(200).json({
             user
         });
+
+        jwt.sign({id: user._id});
         // send response
     }
 
