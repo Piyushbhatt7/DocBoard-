@@ -14,10 +14,15 @@ class LoginScree extends ConsumerStatefulWidget {
 
 class _LoginScreeState extends ConsumerState<LoginScree> {               
   
-  void signInWithGoogle(WidgetRef ref) async {
+  void signInWithGoogle(WidgetRef ref, BuildContext context) async {
+    final sMessanger = ScaffoldMessenger.of(context);
     final errorModel = await ref.read(authRepositoryProvider).signInWithGoogle();   
-    if(errorModel.error == null){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorModel.error!)));
+    if(errorModel.error != null){
+     sMessanger
+      .showSnackBar(
+        SnackBar(content: 
+        Text(errorModel.error!)
+        ));
     }          
   }
 
@@ -27,7 +32,7 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
     return Scaffold(
       body: Center(
         child: ElevatedButton.icon(
-          onPressed: () => signInWithGoogle(ref),      
+          onPressed: () => signInWithGoogle(ref, context),      
           icon: Image.asset( 
             'assets/images/g-logo-2.png',      
             height: 20,  
