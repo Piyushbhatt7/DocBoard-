@@ -28,50 +28,49 @@ class AuthRepository {
     _client = client;
 
 
-  Future<ErrorModel> signInWithGoogle() async {
+ Future<ErrorModel> signInWithGoogle() async {
+  ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', data: null);
 
-    ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', 
-    data: null,
-    );
+  try {
+    GoogleSignInAccount? user = await _googleSignIn.signInSilently();
 
-    try{
-      final user = await _googleSignIn.signInSilently();
-      if(user!=null)
-      {
-        final userAcc = UserModel(
-          email: user.email,
-           name: user.displayName!, 
-           profilePic: user.photoUrl!, 
-           uid: '', 
-           token: '',
-          // id: ''
-           );
-      
+    // ✅ Fallback to full sign-in if silent fails
+    user ??= await _googleSignIn.signIn();
 
-      var res = await _client.post(Uri.parse('$host/api/signup'),
-      body: userAcc.toJson(),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      });
+    if (user != null) {
+      final userAcc = UserModel(
+        email: user.email,
+        name: user.displayName ?? 'No Name',
+        profilePic: user.photoUrl ?? '',
+        uid: '',
+        token: '',
+      );
 
-      switch(res.statusCode){
+      var res = await _client.post(
+        Uri.parse('$host/api/signup'),
+        body: jsonEncode(userAcc.toJson()), // ✅ jsonEncode to avoid sending Map
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      switch (res.statusCode) {
         case 200:
-        final newUser = userAcc.copyWith(
-          uid: jsonDecode(res.body)['user']['_id'],
-
-        );
-        error = ErrorModel(error: null, data: newUser);
-        break;
-        // default:
-        // throw 'Some error occured';
+          final newUser = userAcc.copyWith(
+            uid: jsonDecode(res.body)['user']['_id'],
+          );
+          error = ErrorModel(error: null, data: newUser);
+          break;
+        default:
+          error = ErrorModel(error: 'Signup failed. Status code: ${res.statusCode}', data: null);
       }
     }
-    }
-    catch(e)
-    {
-      error = ErrorModel(error: e.toString(), data: null);
-      print(e);
-    }
-    return error;
+  } catch (e) {
+    print(e);
+    error = ErrorModel(error: e.toString(), data: null);
   }
+
+  return error;
+}
+
 }
