@@ -44,7 +44,7 @@ class AuthRepository {
            profilePic: user.photoUrl!, 
            uid: '', 
            token: '',
-           id: ''
+          // id: ''
            );
       
 

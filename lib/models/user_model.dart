@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class UserModel {
   final String email;
-  final String id;
+  //final String id;
   final String name;
   final String profilePic;
   final String uid;
@@ -10,7 +10,7 @@ class UserModel {
 
   UserModel({
     required this.email,
-    required this.id,
+    //required this.id,
     required this.name,
     required this.profilePic,
     required this.uid,
@@ -21,10 +21,10 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       email: json['email'] ?? '',
-      id: json['id'],
+      //id: json['id'],
       name: json['name'],
       profilePic: json['profilePic'],
-      uid: json['uid'],
+      uid: json['_id'],
       token: json['token'],
     );
   }
@@ -33,7 +33,7 @@ class UserModel {
   Map<String, dynamic> toJson() {
     return {
       'email': email,
-      'id': id,
+     // 'id': id,
       'name': name,
       'profilePic': profilePic,
       'uid': uid,
@@ -52,7 +52,7 @@ class UserModel {
   }) {
     return UserModel(
       email: email ?? this.email,
-      id: id ?? this.id,
+      //id: id ?? this.id,
       name: name ?? this.name,
       profilePic: profilePic ?? this.profilePic,
       uid: uid ?? this.uid,
