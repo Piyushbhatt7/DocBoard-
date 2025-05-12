@@ -22,10 +22,10 @@ class UserModel {
     return UserModel(
       email: json['email'] ?? '',
       //id: json['id'],
-      name: json['name'],
-      profilePic: json['profilePic'],
-      uid: json['_id'],
-      token: json['token'],
+      name: json['name'] ?? '',
+      profilePic: json['profilePic'] ?? '',
+      uid: json['_id'] ?? '',
+      token: json['token'] ?? '',
     );
   }
 
