@@ -23,13 +23,16 @@ authRouter.post('/signup', async (req, res) => {
             });
             user = await user.save();
         }
+        const token = jwt.sign({id: user._id});
+
+        res.json({user, token});
         // store data
 
         res.status(200).json({
             user
         });
 
-        const token = jwt.sign({id: user._id});
+        
         // send response
     }
 
