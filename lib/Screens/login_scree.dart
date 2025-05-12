@@ -18,7 +18,7 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
     final sMessanger = ScaffoldMessenger.of(context);
     final errorModel = await ref.read(authRepositoryProvider).signInWithGoogle();   
     if(errorModel.error == null){
-      
+      ref.read(userProvider.notifier).update((state) => errorModel.data);
     } 
     else {
         sMessanger
