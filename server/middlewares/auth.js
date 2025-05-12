@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const { json } = require("express");
 
 const auth = async (req, res, next) => {
@@ -9,7 +11,7 @@ const auth = async (req, res, next) => {
         {
             return res.status(401).json({msg: "No auth token access denied"});
 
-            const verified = 
+            const verified = jwt.verify(token, );
         }
     }
     catch(e)
