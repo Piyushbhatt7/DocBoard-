@@ -17,13 +17,16 @@ class _LoginScreeState extends ConsumerState<LoginScree> {
   void signInWithGoogle(WidgetRef ref, BuildContext context) async {
     final sMessanger = ScaffoldMessenger.of(context);
     final errorModel = await ref.read(authRepositoryProvider).signInWithGoogle();   
-    if(errorModel.error != null){
-     sMessanger
-      .showSnackBar(
+    if(errorModel.error == null){
+
+    } 
+    else {
+        sMessanger
+        .showSnackBar(
         SnackBar(content: 
         Text(errorModel.error!)
-        ));
-    }          
+      ));
+    }         
   }
 
   @override
