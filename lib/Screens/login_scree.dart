@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
+import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 
 class LoginScree extends ConsumerStatefulWidget {
@@ -13,9 +14,8 @@ class LoginScree extends ConsumerStatefulWidget {
 
 class _LoginScreeState extends ConsumerState<LoginScree> {               
   
-  void signInWithGoogle(WidgetRef ref)        
-  {
-    ref.read(authRepositoryProvider).signInWithGoogle();             
+  void signInWithGoogle(WidgetRef ref) async {
+    final errorModel = await ref.read(authRepositoryProvider).signInWithGoogle();             
   }
 
   @override
