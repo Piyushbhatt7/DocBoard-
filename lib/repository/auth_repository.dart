@@ -30,7 +30,9 @@ class AuthRepository {
 
   Future<ErrorModel> signInWithGoogle() async {
 
-    ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', data: data)
+    ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', 
+    data: null,
+    );
 
     try{
       final user = await _googleSignIn.signIn();
@@ -58,6 +60,7 @@ class AuthRepository {
           uid: jsonDecode(res.body)['user']['_id'],
 
         );
+        error = ErrorModel(error: null, data: data)
         break;
         default:
         throw 'Some error occured';
