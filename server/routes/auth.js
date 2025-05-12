@@ -30,9 +30,7 @@ authRouter.post('/signup', async (req, res) => {
 
         res.status(200).json({
             user
-        });
-
-        
+        });  
         // send response
     }
 
@@ -42,5 +40,7 @@ authRouter.post('/signup', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong.' });
     }
 });
+
+authRouter.get();
 
 module.exports = authRouter;
