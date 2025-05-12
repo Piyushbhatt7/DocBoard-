@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/constants.dart';
+import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
@@ -27,7 +28,9 @@ class AuthRepository {
     _client = client;
 
 
-  void signInWithGoogle() async {
+  Future<ErrorModel> signInWithGoogle() async {
+
+    ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', data: data)
 
     try{
       final user = await _googleSignIn.signIn();
