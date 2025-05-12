@@ -60,7 +60,7 @@ class AuthRepository {
           uid: jsonDecode(res.body)['user']['_id'],
 
         );
-        error = ErrorModel(error: null, data: data)
+        error = ErrorModel(error: null, data: newUser);
         break;
         default:
         throw 'Some error occured';
