@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken');
 
 const { json } = require("express");
  
-const auth = async (req, res, next) => { 
+const auth = async (req, res, next) => {  
 
-    try {                   
+    try {                    
         const token = req.header("x-auth-token");                
   
         if(!token)  
