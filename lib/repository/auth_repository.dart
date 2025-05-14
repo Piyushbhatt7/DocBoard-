@@ -12,7 +12,7 @@ final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
     googleSignIn: GoogleSignIn(), 
     client: Client(), 
-    localStorageRepo: null,
+    localStorageRepo: LocalStorageRepo(),
     ));
 
 final userProvider = StateProvider<UserModel?>((ref) => null); // 1:47
