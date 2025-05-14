@@ -84,19 +84,9 @@ class AuthRepository {
   ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', data: null);
 
   try {
-    GoogleSignInAccount? user = await _googleSignIn.signInSilently();
-
-    // ✅ Fallback to full sign-in if silent fails
-    user ??= await _googleSignIn.signIn();
-
-    if (user != null) {
-      final userAcc = UserModel(
-        email: user.email,
-        name: user.displayName ?? 'No Name',
-        profilePic: user.photoUrl ?? '',
-        uid: '',
-        token: '',
-      );
+    
+    String? token = await _localStorageRepo.getToken();
+    
 
       var res = await _client.post(
         Uri.parse('$host/api/signup'),
