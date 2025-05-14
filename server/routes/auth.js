@@ -41,7 +41,7 @@ authRouter.post('/signup', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong.' });
     }
 });
-
+ 
 authRouter.get('/', auth, async (req, res) => {
    //// console.log(req.user);
    const user = await User.findById(req.user);
