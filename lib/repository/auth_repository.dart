@@ -86,22 +86,21 @@ class AuthRepository {
   try {
     
     String? token = await _localStorageRepo.getToken();
-    
 
-      var res = await _client.post(
-        Uri.parse('$host/api/signup'),
-        body: jsonEncode(userAcc.toJson()), // ✅ jsonEncode to avoid sending Map
+    if(token!=null)
+    {
+
+      var res = await _client.get(
+        Uri.parse('$host/'),
         headers: {
           'Content-Type': 'application/json',
+          'x-auth-token': token,
         },
       );
 
       switch (res.statusCode) {
         case 200:
-          final newUser = userAcc.copyWith(
-            uid: jsonDecode(res.body)['user']['_id'],
-            token: jsonDecode(res.body)['token'],
-          );
+          final newUser = UserModel.fromJson(res.body);
           error = ErrorModel(error: null, data: newUser);
           _localStorageRepo.setToken(newUser.token);
           break;
@@ -109,6 +108,7 @@ class AuthRepository {
           error = ErrorModel(error: 'Signup failed. Status code: ${res.statusCode}', data: null);
       }
     }
+    
   } catch (e) {
     print(e);
     error = ErrorModel(error: e.toString(), data: null);
