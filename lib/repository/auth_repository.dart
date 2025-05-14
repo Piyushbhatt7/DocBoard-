@@ -100,9 +100,8 @@ class AuthRepository {
 
       switch (res.statusCode) {
         case 200:
-          final newUser = UserModel.fromJson(
-  jsonDecode(res.body)['user'] as Map<String, dynamic>
-).copyWith(token: token);
+          final newUser = UserModel.fromJson(jsonDecode(res.body)['user'])
+          .copyWith(token: token);
 
           error = ErrorModel(error: null, data: newUser);
           _localStorageRepo.setToken(newUser.token);
