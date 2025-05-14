@@ -5,14 +5,14 @@ import 'package:google_docs/colors.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 
-class LoginScree extends ConsumerStatefulWidget {
-  const LoginScree ({Key? key}) : super(key: key);
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen ({Key? key}) : super(key: key);
 
   @override                                     
-  ConsumerState<LoginScree> createState() => _LoginScreeState();                                     
+  ConsumerState<LoginScreen> createState() => _LoginScreeState();                                     
 }        
 
-class _LoginScreeState extends ConsumerState<LoginScree> {               
+class _LoginScreeState extends ConsumerState<LoginScreen> {               
   
   void signInWithGoogle(WidgetRef ref, BuildContext context) async {
     final sMessanger = ScaffoldMessenger.of(context);
