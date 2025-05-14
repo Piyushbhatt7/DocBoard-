@@ -8,9 +8,10 @@ class LocalStorageRepo {
     preferences.setString('x-auth-token', token);
   }
 
-  void getToken() async {
+  Future<String?> getToken() async {
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.getString('x-auth-token');
+    String? token = await preferences.getString('x-auth-token');
+    return token;
   }
 }
