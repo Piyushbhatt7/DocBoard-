@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/Screens/home_screen.dart';
 import 'package:google_docs/colors.dart';
-import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/repository/auth_repository.dart';
+import 'package:google_sign_in_web/google_sign_in_web.dart';
+
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen ({Key? key}) : super(key: key);
