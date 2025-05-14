@@ -14,7 +14,7 @@ const auth = async (req, res, next) => {
             const verified = jwt.verify(token, "passwordKey"); // 2:14
 
             if(!verified)
-                return res.status(401).json({msg: 'Token verification failed', "authorization failed"})
+                return res.status(401).json({msg: 'Token verification failed, authorization failed'});
         }
     }
     catch(e)
