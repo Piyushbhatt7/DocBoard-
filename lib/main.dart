@@ -34,6 +34,10 @@ ErrorModel? errorModel;
   void getUserData() async
   {
     errorModel = await ref.read(authRepositoryProvider).getUserData();
+
+    if(errorModel!= null && errorModel!.data != null){
+      ref.read(userProvider.notifier).update((state) => errorModel!.data);
+    }
   }
   @override
   Widget build(BuildContext context) {
