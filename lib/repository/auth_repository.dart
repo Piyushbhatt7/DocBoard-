@@ -100,7 +100,7 @@ class AuthRepository {
 
       switch (res.statusCode) {
         case 200:
-          final newUser = UserModel.fromJson(res.body);
+          final newUser = UserModel.fromJson(jsonDecode(res.body));
           error = ErrorModel(error: null, data: newUser);
           _localStorageRepo.setToken(newUser.token);
           break;
