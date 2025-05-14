@@ -22,37 +22,46 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+  ErrorModel? errorModel;
+  bool isLoading = true;
 
-ErrorModel? errorModel;
-@override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUserData();
-
   }
 
-  void getUserData() async
-  {
+  void getUserData() async {
     errorModel = await ref.read(authRepositoryProvider).getUserData();
-
-    if(errorModel!= null && errorModel!.data != null){
+    if (errorModel != null && errorModel!.data != null) {
       ref.read(userProvider.notifier).update((state) => errorModel!.data);
     }
+    setState(() {
+      isLoading = false;
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
+
+    if (isLoading) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: user == null ? const LoginScree() : HomeScreen(),
+      home: user == null ? const LoginScreen() : const HomeScreen(),
     );
   }
 }
+
 
