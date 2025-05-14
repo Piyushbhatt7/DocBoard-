@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const jwt = require('jsonwebtoken');
+const auth = require("../middlewares/auth");
 
 const authRouter = express.Router();
 
@@ -41,8 +42,9 @@ authRouter.post('/signup', async (req, res) => {
     }
 });
 
-authRouter.get('/', authRouter, async (req, res) => {
+authRouter.get('/', auth, async (req, res) => {
    //// console.log(req.user);
+   const user = await User.findById(req.user);
 });
 
 module.exports = authRouter;
