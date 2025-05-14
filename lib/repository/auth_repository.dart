@@ -79,7 +79,7 @@ class AuthRepository {
 
       if (token != null) {
         var res = await _client.get(Uri.parse('$host/'), headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
+         // 'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,
         });
         switch (res.statusCode) {
