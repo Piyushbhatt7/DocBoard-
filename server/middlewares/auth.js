@@ -18,10 +18,11 @@ const auth = async (req, res, next) => {
             .status(401)
             .json({msg: 'Token verification failed, authorization failed'});
         
-            req.user = verified.indexOf;
+            req.user = verified.id;
+            req.token = token;
     }
     catch(e)
     {
-
+        res.status(500).json({erro: e.message});
     }
 }
