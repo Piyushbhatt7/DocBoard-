@@ -45,9 +45,14 @@ class AuthRepository {
           token: '',
         );
 
-        var res = await _client.post(Uri.parse('$host/api/signup'), body: userAcc.toJson(), headers: {
-          'Content-Type': 'application/json',
-        });
+        var res = await _client.post(
+        Uri.parse('$host/api/signup'),
+        body: jsonEncode(userAcc.toJson()),
+        headers: {
+        'Content-Type': 'application/json',
+      },
+   );
+
 
         switch (res.statusCode) {
           case 200:
