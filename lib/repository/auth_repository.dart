@@ -4,13 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/constants.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/models/user_model.dart';
+import 'package:google_docs/repository/local_storage_repo.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 
 final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
     googleSignIn: GoogleSignIn(), 
-    client: Client(),
+    client: Client(), 
+    localStorageRepo: null,
     ));
 
 final userProvider = StateProvider<UserModel?>((ref) => null); // 1:47
@@ -18,14 +20,17 @@ final userProvider = StateProvider<UserModel?>((ref) => null); // 1:47
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
   final Client _client;
+  final LocalStorageRepo _localStorageRepo;
   //35:44
 
   AuthRepository({
     required GoogleSignIn googleSignIn, 
-    required Client client
-    })
-    : _googleSignIn = googleSignIn,
-    _client = client;
+    required Client client,
+    required LocalStorageRepo localStorageRepo, 
+  })  : _googleSignIn = googleSignIn,
+        _client = client,
+        _localStorageRepo = localStorageRepo;
+
 
 
  Future<ErrorModel> signInWithGoogle() async {
@@ -61,6 +66,7 @@ class AuthRepository {
             token: jsonDecode(res.body)['token'],
           );
           error = ErrorModel(error: null, data: newUser);
+          _localStorageRepo.setToken(newUser.token);
           break;
         default:
           error = ErrorModel(error: 'Signup failed. Status code: ${res.statusCode}', data: null);
