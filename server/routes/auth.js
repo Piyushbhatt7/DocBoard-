@@ -40,7 +40,7 @@ authRouter.post('/signup', async (req, res) => {
         console.error(e);
         res.status(500).json({ error: 'Something went wrong.' });
     }
-});    
+});     
   
 authRouter.get('/', auth, async (req, res) => {
    //// console.log(req.user);
