@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/constants.dart';
 import 'package:google_docs/models/error_model.dart';
@@ -32,15 +33,19 @@ class AuthRepository {
         _localStorageRepo = localStorageRepo;
 
 
-
- Future<ErrorModel> signInWithGoogle() async {
+Future<ErrorModel> signInWithGoogle() async {
   ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', data: null);
 
   try {
-    GoogleSignInAccount? user = await _googleSignIn.signInSilently();
+    GoogleSignInAccount? user;
 
-    // ✅ Fallback to full sign-in if silent fails
-    user ??= await _googleSignIn.signIn();
+    if (kIsWeb) {
+      // Use only silent sign-in on web
+      user = await _googleSignIn.signInSilently();
+    } else {
+      user = await _googleSignIn.signInSilently();
+      user ??= await _googleSignIn.signIn();
+    }
 
     if (user != null) {
       final userAcc = UserModel(
@@ -53,32 +58,32 @@ class AuthRepository {
 
       var res = await _client.post(
         Uri.parse('$host/api/signup'),
-        body: jsonEncode(userAcc.toJson()), // ✅ jsonEncode to avoid sending Map
+        body: jsonEncode(userAcc.toJson()),
         headers: {
           'Content-Type': 'application/json',
         },
       );
 
-      switch (res.statusCode) {
-        case 200:
-          final newUser = userAcc.copyWith(
-            uid: jsonDecode(res.body)['user']['_id'],
-            token: jsonDecode(res.body)['token'],
-          );
-          error = ErrorModel(error: null, data: newUser);
-          _localStorageRepo.setToken(newUser.token);
-          break;
-        default:
-          error = ErrorModel(error: 'Signup failed. Status code: ${res.statusCode}', data: null);
+      if (res.statusCode == 200) {
+        final newUser = userAcc.copyWith(
+          uid: jsonDecode(res.body)['user']['_id'],
+          token: jsonDecode(res.body)['token'],
+        );
+        error = ErrorModel(error: null, data: newUser);
+        await _localStorageRepo.setToken(newUser.token);
+      } else {
+        error = ErrorModel(
+            error: 'Signup failed. Status code: ${res.statusCode}', data: null);
       }
     }
   } catch (e) {
-    print(e);
+    print('[SIGNIN ERROR] $e');
     error = ErrorModel(error: e.toString(), data: null);
   }
 
   return error;
 }
+
 
  Future<ErrorModel> getUserData() async {
   ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', data: null);
