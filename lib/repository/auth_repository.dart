@@ -8,16 +8,13 @@ import 'package:google_docs/models/user_model.dart';
 import 'package:google_docs/repository/local_storage_repo.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
-import 'package:http/http.dart' as http;
 
-final authRepositoryProvider = Provider((ref) {
-  return AuthRepository(
-    googleSignIn: GoogleSignIn(scopes: ['email', 'profile']),
-    client: http.Client(),
+final authRepositoryProvider = Provider(
+  (ref) => AuthRepository(
+    googleSignIn: GoogleSignIn(), 
+    client: Client(), 
     localStorageRepo: LocalStorageRepo(),
-  );
-});
-
+    ));
 
 final userProvider = StateProvider<UserModel?>((ref) => null); // 1:47
 
@@ -43,23 +40,17 @@ Future<ErrorModel> signInWithGoogle() async {
     GoogleSignInAccount? user;
 
     if (kIsWeb) {
-      print('[SIGNIN] Attempting signInSilently() on Web...');
+      // Use only silent sign-in on web
       user = await _googleSignIn.signInSilently();
     } else {
-      print('[SIGNIN] Attempting signInSilently() on Mobile...');
       user = await _googleSignIn.signInSilently();
-      if (user == null) {
-        print('[SIGNIN] signInSilently failed, trying signIn...');
-        user = await _googleSignIn.signIn();
-      }
+      user ??= await _googleSignIn.signIn();
     }
-
-    print('[SIGNIN] User: $user');
 
     if (user != null) {
       final userAcc = UserModel(
         email: user.email,
-        name: user.displayName ?? 'No Name',
+        name: user.displayName!,
         profilePic: user.photoUrl ?? '',
         uid: '',
         token: '',
@@ -69,11 +60,9 @@ Future<ErrorModel> signInWithGoogle() async {
         Uri.parse('$host/api/signup'),
         body: jsonEncode(userAcc.toJson()),
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=UTF-8'
         },
       );
-
-      print('[SIGNIN] Signup API Response: ${res.statusCode} - ${res.body}');
 
       if (res.statusCode == 200) {
         final newUser = userAcc.copyWith(
@@ -86,17 +75,15 @@ Future<ErrorModel> signInWithGoogle() async {
         error = ErrorModel(
             error: 'Signup failed. Status code: ${res.statusCode}', data: null);
       }
-    } else {
-      error = ErrorModel(error: 'User is null. Sign-in failed.', data: null);
     }
-  } catch (e, st) {
+  } catch (e) {
     print('[SIGNIN ERROR] $e');
-    print('[STACKTRACE] $st');
     error = ErrorModel(error: e.toString(), data: null);
   }
 
   return error;
 }
+
 
  Future<ErrorModel> getUserData() async {
   ErrorModel error = ErrorModel(error: 'Some unexpected error occurred', data: null);
