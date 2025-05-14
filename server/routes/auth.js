@@ -45,6 +45,7 @@ authRouter.post('/signup', async (req, res) => {
 authRouter.get('/', auth, async (req, res) => {
    //// console.log(req.user);
    const user = await User.findById(req.user);
+   res.json({user, token: req.token})
 });
 
 module.exports = authRouter;
