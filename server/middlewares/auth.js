@@ -12,6 +12,9 @@ const auth = async (req, res, next) => {
             return res.status(401).json({msg: "No auth token access denied"});
 
             const verified = jwt.verify(token, "passwordKey"); // 2:14
+
+            if(!verified)
+                return res.status(401).json({msg: ''})
         }
     }
     catch(e)
