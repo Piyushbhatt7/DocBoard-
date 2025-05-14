@@ -100,12 +100,15 @@ class AuthRepository {
 
       switch (res.statusCode) {
         case 200:
-          final newUser = UserModel.fromJson( jsonEncode( jsonDecode(res.body)['user'])as Map<String, dynamic>);
+          final newUser = UserModel.fromJson(
+            jsonEncode(
+              jsonDecode(res.body)['user'])
+              as Map<String, dynamic>).copyWith(
+                token: token,
+              );
           error = ErrorModel(error: null, data: newUser);
           _localStorageRepo.setToken(newUser.token);
           break;
-        default:
-          error = ErrorModel(error: 'Signup failed. Status code: ${res.statusCode}', data: null);
       }
     }
     
