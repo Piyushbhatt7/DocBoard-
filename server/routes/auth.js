@@ -23,7 +23,7 @@ authRouter.post('/signup', async (req, res) => {
             });
             user = await user.save();
         }
-        const token = jwt.sign({id: user._id});
+        const token = jwt.sign({id: user._id}, "passwordKey");
 
         res.json({user, token});
         // store data
