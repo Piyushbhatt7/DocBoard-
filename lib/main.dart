@@ -4,6 +4,7 @@ import 'package:google_docs/Screens/home_screen.dart';
 import 'package:google_docs/Screens/login_scree.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/repository/auth_repository.dart';
+import 'package:routemaster/routemaster.dart';
 
 void main() {
   runApp(
@@ -23,15 +24,21 @@ class MyApp extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
+  
 
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.blue,
       ),
-      home: user == null ? const LoginScreen() : const HomeScreen(),
+      routerDelegate: RoutemasterDelegate(routesBuilder: (BuildContext context) { 
+          final user = ref.watch(userProvider);
+          if(user!=null && user.token.isNotEmpty) {
+            
+          }
+       }),
+     routeInformationParser: const RoutemasterParser(),
     );
   }
 }
