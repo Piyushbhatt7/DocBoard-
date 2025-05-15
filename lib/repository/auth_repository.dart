@@ -35,7 +35,14 @@ class AuthRepository {
       data: null,
     );
     try {
-      final user = await _googleSignIn.signIn();
+      // First try to sign in silently
+      GoogleSignInAccount? user = await _googleSignIn.signInSilently();
+      
+      // If silent sign-in fails, show the popup
+      if (user == null) {
+        user = await _googleSignIn.signIn();
+      }
+
       if (user != null) {
         final userAcc = UserModel(
           email: user.email,
@@ -46,13 +53,12 @@ class AuthRepository {
         );
 
         var res = await _client.post(
-        Uri.parse('$host/api/signup'),
-        body: jsonEncode(userAcc.toJson()),
-        headers: {
-        'Content-Type': 'application/json',
-      },
-   );
-
+          Uri.parse('$host/api/signup'),
+          body: jsonEncode(userAcc.toJson()),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        );
 
         switch (res.statusCode) {
           case 200:
@@ -61,7 +67,7 @@ class AuthRepository {
               token: jsonDecode(res.body)['token'],
             );
             error = ErrorModel(error: null, data: newUser);
-            _localStorageRepository.setToken(newUser.token);
+            await _localStorageRepository.setToken(newUser.token);
             break;
         }
       }
@@ -82,19 +88,25 @@ class AuthRepository {
     try {
       String? token = await _localStorageRepository.getToken();
 
-      if (token != null) {
-        var res = await _client.get(Uri.parse('$host/'), headers: {
-         // 'Content-Type': 'application/json; charset=UTF-8',
-         'Content-Type': 'application/json',
-          'x-auth-token': token,
-        });
+      if (token != null && token.isNotEmpty) {
+        var res = await _client.get(
+          Uri.parse('$host/api/'),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token,
+          },
+        );
+        
         switch (res.statusCode) {
           case 200:
             final newUser = UserModel.fromJson(
               jsonDecode(res.body)['user'],
             ).copyWith(token: token);
             error = ErrorModel(error: null, data: newUser);
-            _localStorageRepository.setToken(newUser.token);
+            await _localStorageRepository.setToken(newUser.token);
+            break;
+          default:
+            await _localStorageRepository.setToken('');
             break;
         }
       }
@@ -103,12 +115,13 @@ class AuthRepository {
         error: e.toString(),
         data: null,
       );
+      await _localStorageRepository.setToken('');
     }
     return error;
   }
 
   void signOut() async {
     await _googleSignIn.signOut();
-    _localStorageRepository.setToken('');
+    await _localStorageRepository.setToken('');
   }
 }
