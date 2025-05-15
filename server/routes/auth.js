@@ -6,17 +6,15 @@ const auth = require("../middlewares/auth");
 const authRouter = express.Router();
 
 authRouter.post('/signup', async (req, res) => {
-
     try {
-        const {name, email, profilePic} = req.body; // 1:10
+        const {name, email, profilePic} = req.body;
         
         // email already exists?
         let user = await User.findOne({
             email: email,
         });
 
-        if(!user)
-        {
+        if(!user) {
             user = new User({
                 email,
                 profilePic,
@@ -26,26 +24,17 @@ authRouter.post('/signup', async (req, res) => {
         }
         const token = jwt.sign({id: user._id}, "passwordKey");
 
-        res.json({user, token});
-        // store data
-
-        res.status(200).json({
-            user
-        });  
-        // send response
+        res.status(200).json({user, token});
     }
-
-    catch (e)
-    {
+    catch (e) {
         console.error(e);
         res.status(500).json({ error: 'Something went wrong.' });
     }
 });      
   
 authRouter.get('/', auth, async (req, res) => {
-   //// console.log(req.user);
    const user = await User.findById(req.user);
-   res.json({user, token: req.token})
+   res.json({user, token: req.token});
 });
 
 module.exports = authRouter;
