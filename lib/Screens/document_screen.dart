@@ -17,13 +17,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     // final myValue = ref.watch(myProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Document Screen'),
-      ),
       body: Center(
         child: Text(
-          'This is the Document Screen',
-          style: Theme.of(context).textTheme.headlineSmall,
+          widget.id,
         ),
       ),
     );
