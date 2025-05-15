@@ -31,9 +31,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (errorModel.error == null) {
       ref.read(userProvider.notifier).update((state) => errorModel.data);
-      navigator.pushReplacement( // Use pushReplacement to replace login screen
-        MaterialPageRoute(builder: (context) => const HomeScreen())
-      );
+      navigator.pushReplacement('/');
     } else {
       sMessanger.showSnackBar(SnackBar(content: Text(errorModel.error!)));
     }         
