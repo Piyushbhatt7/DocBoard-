@@ -9,7 +9,13 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        
+        actions: [
+          IconButton(onPressed: ()
+          {
+
+          }, icon: Icon(Icons.add)
+          )
+        ],
       ),
       body: Center(
         child: 
