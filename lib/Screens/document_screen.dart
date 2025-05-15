@@ -1,13 +1,29 @@
-class DocumentScreen extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class DocumentScreen extends ConsumerStatefulWidget {
   const DocumentScreen({super.key});
 
   @override
-  State<DocumentScreen> createState() => _DocumentScreenState();
+  ConsumerState<DocumentScreen> createState() => _DocumentScreenState();
 }
 
-class _DocumentScreenState extends State<DocumentScreen> {
+class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    // Example: Accessing a provider
+    // final myValue = ref.watch(myProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Document Screen'),
+      ),
+      body: Center(
+        child: Text(
+          'This is the Document Screen',
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+      ),
+    );
   }
 }
