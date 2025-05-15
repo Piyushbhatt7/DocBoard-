@@ -15,7 +15,11 @@ const documentSchema = mongoose.Schema({
     },
     content: {
         type: Array,
+        default: [],
+
     }
 });
 
-module.exports = documentSchema;
+const Document = mongoose.model("Document", documentSchema);
+
+module.exports = Document;
