@@ -8,6 +8,9 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      appBar: AppBar(
+        
+      ),
       body: Center(
         child: 
         Text(ref.watch(userProvider)!.email),
