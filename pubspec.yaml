@@ -40,6 +40,7 @@ dependencies:
   json_annotation: ^4.9.0
   http: ^1.4.0
   shared_preferences: ^2.5.3
+  routemaster: ^1.0.1
 
 dev_dependencies:
   flutter_test:
