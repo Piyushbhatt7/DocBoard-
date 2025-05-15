@@ -31,7 +31,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (errorModel.error == null) {
       ref.read(userProvider.notifier).update((state) => errorModel.data);
-      navigator.pushReplacement('/');
+      navigator.replace('/');
     } else {
       sMessanger.showSnackBar(SnackBar(content: Text(errorModel.error!)));
     }         
