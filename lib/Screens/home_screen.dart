@@ -13,8 +13,14 @@ class HomeScreen extends ConsumerWidget {
           IconButton(onPressed: ()
           {
 
-          }, icon: Icon(Icons.add)
-          )
+          }, icon: const Icon(Icons.add)
+          ),
+
+           IconButton(onPressed: ()
+          {
+
+          }, icon: const Icon(Icons.logout)
+          ),
         ],
       ),
       body: Center(
