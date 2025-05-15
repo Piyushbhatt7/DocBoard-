@@ -11,7 +11,8 @@ documentRouter.post('/doc/create', auth, async(req, res) => {
         
         const { createdAt } = req.body;
         let document = new Document({
-
+            uid: req.user,
+            
         })
     }
     catch(e)
