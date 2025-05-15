@@ -8,7 +8,11 @@ const e = require('express');
 documentRouter.post('/doc/create', auth, async(req, res) => {
 
     try{
+        
+        const { createdAt } = req.body;
+        let document = new Document({
 
+        })
     }
     catch(e)
     {
