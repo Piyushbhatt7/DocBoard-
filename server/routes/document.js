@@ -24,3 +24,5 @@ documentRouter.post('/doc/create', auth, async(req, res) => {
         res.status(500).json({error: e.message})
     }
 }); 
+
+module.exports = documentRouter;
