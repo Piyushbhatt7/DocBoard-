@@ -12,6 +12,9 @@ const documentSchema = mongoose.Schema({
         required: true,
         type: String,
         trim: true,
+    },
+    content: {
+        type: Array,
     }
 });
 
