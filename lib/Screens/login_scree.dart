@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/Screens/home_screen.dart';
 import 'package:google_docs/colors.dart';
 import 'package:google_docs/repository/auth_repository.dart';
+import 'package:routemaster/routemaster.dart';
 
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -21,7 +22,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     final sMessanger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
+    final navigator = Routemaster.of(context);
     final errorModel = await ref.read(authRepositoryProvider).signInWithGoogle();   
 
     setState(() {
