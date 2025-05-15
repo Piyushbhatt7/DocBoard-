@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
-  const DocumentScreen({super.key});
+  final String id;
+
+  const DocumentScreen({super.key, required this.id});
 
   @override
   ConsumerState<DocumentScreen> createState() => _DocumentScreenState();
