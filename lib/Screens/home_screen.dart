@@ -3,8 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
+
+  void signOut(WidgetRef ref)
+  {
+    ref.read(authRepositoryProvider).signOut();
+    ref.read(userProvider.notifier).update((state) => null);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
