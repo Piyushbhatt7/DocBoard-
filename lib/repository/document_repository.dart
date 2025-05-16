@@ -53,7 +53,8 @@ class DocumentRepository {
             default:
             error = ErrorModel(
               error: res.body, 
-              data: data)
+              data: null,
+              );
         }
       
       } catch (e) {
