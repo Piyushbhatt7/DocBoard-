@@ -29,7 +29,7 @@ class HomeScreen extends ConsumerWidget {
     }
 
     else {
-      snackbar.s
+      snackbar.showSnackBar(SnackBar(content: Text(errorModel.error!)));
     }
   }
 
