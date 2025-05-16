@@ -9,21 +9,52 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-app.use(cors());
+// Configure CORS for web development
+app.use(cors({
+    origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:3000', 'http://127.0.0.1:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'x-auth-token', 'Accept']
+}));
+
+// Add request logging
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    console.log('Request headers:', req.headers);
+    next();
+});
+
 app.use(express.json());
-app.use(authRouter);
-app.use(documentRouter);
 app.use("/api", authRouter);
+app.use("/api", documentRouter);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Error:', err);
+    res.status(500).json({ error: 'Internal Server Error', details: err.message });
+});
 
 const DB = "mongodb+srv://piyushbhatt162:0k0P2FcurljxejUR@cluster0.mrjbpoh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
-mongoose.connect(DB)
+mongoose.connect(DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
 .then(() => {
-    console.log("Connection successful !");
+    console.log("MongoDB Connection successful!");
 })
 .catch((err) => {
-    console.log(err);
+    console.error("MongoDB Connection Error:", err);
+    process.exit(1); // Exit if cannot connect to database
+});
 
+// Add connection error handler
+mongoose.connection.on('error', err => {
+    console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB disconnected');
 });
 
 // async -> await
@@ -31,6 +62,6 @@ mongoose.connect(DB)
 
 
 app.listen(PORT, "0.0.0.0", () => {
-    console.log('connected at port 3001');
+    console.log(`Server is running on http://localhost:${PORT}`);
     console.log("hey this is changing");
 });
