@@ -52,7 +52,7 @@ class DocumentRepository {
             break;
             default:
             error = ErrorModel(
-              error: error, 
+              error: res.body, 
               data: data)
         }
       
