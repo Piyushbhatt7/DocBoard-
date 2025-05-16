@@ -10,7 +10,7 @@ class DocumentModel {
       uid: json['uid'] as String,
       content: json['content'] as List,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      id: json['id'] as String,
+      id: json['_id'] as String,
     );
   }
 
