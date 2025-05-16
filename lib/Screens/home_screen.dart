@@ -23,6 +23,10 @@ class HomeScreen extends ConsumerWidget {
     final snackbar = Navigator.of(context);
 
     final errorModel = await ref.read(documentRepositoryProvider).createDocument(token);
+
+    if(errorModel.data!=null) {
+      navigator.push('/document/${errorModel.data.id}');
+    }
   }
 
   @override
