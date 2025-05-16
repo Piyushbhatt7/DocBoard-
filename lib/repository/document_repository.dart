@@ -38,7 +38,7 @@ class DocumentRepository {
             'x-auth-token': token,
           },
           body: jsonEncode({
-            'cretedAt': DateTime.now().millisecondsSinceEpoch,
+            'createdAt': DateTime.now().millisecondsSinceEpoch,
           }),
         );
 
