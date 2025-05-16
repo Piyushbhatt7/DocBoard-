@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:google_docs/constants.dart';
+import 'package:google_docs/models/document_model.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
@@ -30,8 +31,11 @@ class DocumentRepository {
 
         switch (res.statusCode) {
           case 200:
-            error = ErrorModel(error: null, data: newUser);
-            await _localStorageRepository.setToken(newUser.token);
+            error = ErrorModel(
+              error: null, 
+              data: DocumentModel.fromJson(res.body),
+              );
+             _localStorageRepository.setToken(newUser.token);
             break;
         }
       
