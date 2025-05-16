@@ -24,7 +24,7 @@ class DocumentRepository {
             'x-auth-token': token,
           },
           body: {
-            'cretedAt'
+            'cretedAt': DateTime.now().millisecondsSinceEpoch
           }
         );
 
