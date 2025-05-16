@@ -29,7 +29,11 @@ class HomeScreen extends ConsumerWidget {
     }
 
     else {
-      snackbar.showSnackBar(SnackBar(content: Text(errorModel.error!)));
+      snackbar.showSnackBar(
+        SnackBar(
+          content: Text(
+            errorModel.error!
+            )));
     }
   }
 
@@ -42,7 +46,7 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           IconButton(onPressed: ()
           {
-
+            createDocument(context, ref);
           }, icon: const Icon(Icons.add)
           ),
 
