@@ -28,7 +28,7 @@ class DocumentRepository {
         error: 'Some unexpected error occurred', 
         data: null,
         );
-        
+
        try {
         
         var res = await _client.post(
@@ -38,7 +38,7 @@ class DocumentRepository {
             'x-auth-token': token,
           },
           body: jsonEncode({
-            'cretedAt': DateTime.now().millisecondsSinceEpoch
+            'cretedAt': DateTime.now().millisecondsSinceEpoch,
           }),
         );
 
@@ -48,8 +48,12 @@ class DocumentRepository {
               error: null, 
               data: DocumentModel.fromJson(res.body),
               );
-             _localStorageRepository.setToken(newUser.token);
+
             break;
+            default:
+            error = ErrorModel(
+              error: error, 
+              data: data)
         }
       
       } catch (e) {
