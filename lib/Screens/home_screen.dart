@@ -13,6 +13,11 @@ class HomeScreen extends ConsumerWidget {
     ref.read(userProvider.notifier).update((state) => null);
   }
 
+  void createDocument(Widget ref) async {
+
+    String token = ref.read(userProvider)!.token;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
