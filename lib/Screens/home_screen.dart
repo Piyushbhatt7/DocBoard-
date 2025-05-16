@@ -14,10 +14,11 @@ class HomeScreen extends ConsumerWidget {
     ref.read(userProvider.notifier).update((state) => null);
   }
 
-  void createDocument(WidgetRef ref) async {
+  void createDocument(BuildContext context, WidgetRef ref) async {
 
     String token = ref.read(userProvider)!.token;
     final navigator = Routemaster.of(context);
+    final snackbar = Navigator.of(context);
   }
 
   @override
