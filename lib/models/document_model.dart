@@ -2,6 +2,6 @@ class DocumentModel {
 
   final String title;
   final String uid;
-  final Sting content;
-  final DateTime;
+  final List content;
+  final DateTime createdAt;
 }
