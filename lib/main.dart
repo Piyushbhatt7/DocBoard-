@@ -6,7 +6,7 @@ import 'package:routemaster/routemaster.dart';
 
 void main() {
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: MyApp()
     ),
   );
@@ -21,14 +21,26 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp> {
   @override
-  Widget build(BuildContext context) {
-  
+  void initState() {
+    super.initState();
+    // Check for existing user data when app starts
+    Future.microtask(() => 
+      ref.read(authRepositoryProvider).getUserData().then((errorModel) {
+        if (errorModel.error == null && errorModel.data != null) {
+          ref.read(userProvider.notifier).update((state) => errorModel.data);
+        }
+      })
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Google Docs Clone',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
       ),
       routerDelegate: RoutemasterDelegate(routesBuilder: (BuildContext context) { 
           final user = ref.watch(userProvider);
@@ -37,7 +49,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           }
           return loggedOutRoute;
        }),
-     routeInformationParser: const RoutemasterParser(),
+      routeInformationParser: const RoutemasterParser(),
     );
   }
 }
