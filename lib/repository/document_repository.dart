@@ -23,9 +23,9 @@ class DocumentRepository {
             'Content-Type': 'application/json',
             'x-auth-token': token,
           },
-          body: {
+          body: jsonEncode({
             'cretedAt': DateTime.now().millisecondsSinceEpoch
-          }
+          }),
         );
 
         switch (res.statusCode) {
