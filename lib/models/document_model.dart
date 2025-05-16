@@ -4,4 +4,5 @@ class DocumentModel {
   final String uid;
   final List content;
   final DateTime createdAt;
+  final String id;
 }
