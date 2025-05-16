@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:google_docs/constants.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
@@ -10,32 +13,19 @@ class DocumentRepository {
     required Client client
     }) : _client = client;
 
-    Future<ErrorModel> createDocument() async {
+    Future<ErrorModel> createDocument(String token) async {
 
        try {
-      // First try to sign in silently // 3:10
-      GoogleSignInAccount? user = await _googleSignIn.signInSilently();
-      
-      // If silent sign-in fails, show the popup
-      if (user == null) {
-        user = await _googleSignIn.signIn();
-      }
-
-      if (user != null) {
-        final userAcc = UserModel(
-          email: user.email,
-          name: user.displayName ?? '',
-          profilePic: user.photoUrl ?? '',
-          uid: '',
-          token: '',
-        );
-
+        
         var res = await _client.post(
-          Uri.parse('$host/api/signup'),
-          body: jsonEncode(userAcc.toJson()),
+          Uri.parse('$host/doc/create'),
           headers: {
             'Content-Type': 'application/json',
+            'x-auth-token': token,
           },
+          body: {
+            'cretedAt'
+          }
         );
 
         switch (res.statusCode) {
@@ -48,7 +38,7 @@ class DocumentRepository {
             await _localStorageRepository.setToken(newUser.token);
             break;
         }
-      }
+      
       } catch (e) {
         error = ErrorModel(
           error: e.toString(),
