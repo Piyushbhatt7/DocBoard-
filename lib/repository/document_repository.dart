@@ -26,8 +26,9 @@ class DocumentRepository {
       
       ErrorModel error = ErrorModel(
         error: 'Some unexpected error occurred', 
-        data: data
-        )
+        data: null,
+        );
+        
        try {
         
         var res = await _client.post(
