@@ -20,12 +20,16 @@ class HomeScreen extends ConsumerWidget {
 
     String token = ref.read(userProvider)!.token;
     final navigator = Routemaster.of(context);
-    final snackbar = Navigator.of(context);
+    final snackbar = ScaffoldMessenger.of(context);
 
     final errorModel = await ref.read(documentRepositoryProvider).createDocument(token);
 
     if(errorModel.data!=null) {
       navigator.push('/document/${errorModel.data.id}');
+    }
+
+    else {
+      snackbar.s
     }
   }
 
