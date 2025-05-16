@@ -46,7 +46,7 @@ class DocumentRepository {
           case 200:
             error = ErrorModel(
               error: null, 
-              data: DocumentModel.fromJson(res.body),
+              data: DocumentModel.fromJson(res.body as Map<String, dynamic>),
               );
 
             break;
