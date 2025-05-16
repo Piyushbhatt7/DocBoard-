@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 import 'package:google_docs/repository/auth_repository.dart';
+import 'package:routemaster/routemaster.dart';
 
 
 class HomeScreen extends ConsumerWidget {
@@ -16,7 +17,7 @@ class HomeScreen extends ConsumerWidget {
   void createDocument(WidgetRef ref) async {
 
     String token = ref.read(userProvider)!.token;
-    
+    final navigator = Routemaster.of(context);
   }
 
   @override
