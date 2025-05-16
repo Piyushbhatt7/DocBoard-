@@ -23,7 +23,11 @@ class DocumentRepository {
     }) : _client = client;
 
     Future<ErrorModel> createDocument(String token) async {
-
+      
+      ErrorModel error = ErrorModel(
+        error: 'Some unexpected error occurred', 
+        data: data
+        )
        try {
         
         var res = await _client.post(
