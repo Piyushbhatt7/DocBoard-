@@ -6,7 +6,7 @@ import 'package:routemaster/routemaster.dart';
  
 final loggedOutRoute = RouteMap(routes: {      
   
-  '/': (route) => const MaterialPage(child: LoginScreen()),
+  '/': (route) => const MaterialPage(child: LoginScreen()), 
 });
 
 final loggedInRoute = RouteMap(routes: {
