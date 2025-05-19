@@ -13,7 +13,7 @@ final authRepositoryProvider = Provider(
     googleSignIn: GoogleSignIn(
       clientId: '193875630945-4g80o8vpci8okssnrbhp3sm72dv7bu83.apps.googleusercontent.com',
       scopes: ['email', 'profile'],
-      serverClientId: '193875630945-4g80o8vpci8okssnrbhp3sm72dv7bu83.apps.googleusercontent.com',
+      serverClientId: kIsWeb ? null : '193875630945-4g80o8vpci8okssnrbhp3sm72dv7bu83.apps.googleusercontent.com',
     ),
     client: Client(),
     localStorageRepository: LocalStorageRepository(),
