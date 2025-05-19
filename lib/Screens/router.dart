@@ -13,4 +13,4 @@ final loggedInRoute = RouteMap(routes: {
 
   '/': (route) => const MaterialPage(child: HomeScreen()),
   '/document/:id': (route) => MaterialPage(child: DocumentScreen(id: route.pathParameters['id'] ?? ''))
-});
+}); 
