@@ -30,7 +30,7 @@ class DocumentRepository {
         );
 
        try {
-         
+        
         var res = await _client.post(
           Uri.parse('$host/doc/create'),
           headers: {
