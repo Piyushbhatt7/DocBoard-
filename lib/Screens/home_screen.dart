@@ -58,7 +58,7 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body:FutureBuilder(
+      body:FutureBuilder <ErrorModel?>(
         future: ref.watch(documentRepositoryProvider)
         .getDocument(
           ref.watch(userProvider)!.token), 
@@ -71,11 +71,12 @@ class HomeScreen extends ConsumerWidget {
           }
 
           return ListView.builder(
+            itemCount: snapshot.data!.data.length,
             itemBuilder: (context, index)
             {
-              
+
             }
-            )
+            );
         }
         )
     );
