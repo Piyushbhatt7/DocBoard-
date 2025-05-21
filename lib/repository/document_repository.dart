@@ -77,7 +77,7 @@ class DocumentRepository {
        try {
         
         var res = await _client.get(
-          Uri.parse('$host/docs/me'),
+          Uri.parse('$host/api/docs/me'),
           headers: {
             'Content-Type': 'application/json',
             'x-auth-token': token,
@@ -89,13 +89,13 @@ class DocumentRepository {
 
         switch (res.statusCode) {
           case 200:
-          List<DocumentModel> document = [];
+          List<DocumentModel> documents = [];
           for (int i = 0; i<jsonDecode(res.body).length; i++) {
-            document.add(DocumentModel.fromJson(jsonDecode(res.body)[i])); 
+            documents.add(DocumentModel.fromJson(jsonDecode(res.body)[i])); 
           }
             error = ErrorModel(
               error: null, 
-              data: document,
+              data: documents,
               );
 
             break;
