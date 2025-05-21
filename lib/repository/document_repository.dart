@@ -76,19 +76,19 @@ class DocumentRepository {
 
        try {
         
-        var res = await _client.post(
-          Uri.parse('$host/doc/create'),
+        var res = await _client.get(
+          Uri.parse('$host/doc/me'),
           headers: {
             'Content-Type': 'application/json',
             'x-auth-token': token,
           },
-          body: jsonEncode({
-            'createdAt': DateTime.now().millisecondsSinceEpoch,
-          }),
         );
 
         switch (res.statusCode) {
           case 200:
+          List<DocumentModel> document = [];
+          for (var doc in jsonDecode(res.body)) {
+          }
             error = ErrorModel(
               error: null, 
               data: DocumentModel.fromJson(res.body as Map<String, dynamic>),
