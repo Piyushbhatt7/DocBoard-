@@ -28,7 +28,8 @@ documentRouter.post('/doc/create', auth, async(req, res) => {
 documentRouter.get('/docs/me', auth, async (req, res) => {
 
     try {
-        let document = await Document.find({uid: })
+        let document = await Document.find({uid: req.user});
+        
     }
 
     catch(e)
