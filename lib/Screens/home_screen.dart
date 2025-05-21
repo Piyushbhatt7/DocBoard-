@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 import 'package:google_docs/common/widgets/loader.dart';
+import 'package:google_docs/models/document_model.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 import 'package:google_docs/repository/document_repository.dart';
@@ -74,7 +75,17 @@ class HomeScreen extends ConsumerWidget {
             itemCount: snapshot.data!.data.length,
             itemBuilder: (context, index)
             {
+              DocumentModel document = snapshot.data!.data[index];
 
+              return Card(
+                child: Center(
+                  child: Text(
+                    document.title, style: TextStyle(
+                      fontSize: 17,
+                    ),
+                  ),
+                ),
+              )
             }
             );
         }
