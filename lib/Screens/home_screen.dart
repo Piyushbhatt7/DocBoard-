@@ -58,10 +58,16 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body:FutureBuilder(
-        future: ref.watch(documentRepositoryProvider).getDocument(ref.watch(userProvider)!.token), 
+        future: ref.watch(documentRepositoryProvider)
+        .getDocument(
+          ref.watch(userProvider)!.token), 
+
         builder: (context, snapshot)
         {
-          
+          if(snapshot.connectionState == ConnectionState.waiting)
+          {
+            
+          }
         }
         )
     );
