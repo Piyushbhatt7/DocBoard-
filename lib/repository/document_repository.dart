@@ -77,12 +77,15 @@ class DocumentRepository {
        try {
         
         var res = await _client.get(
-          Uri.parse('$host/doc/me'),
+          Uri.parse('$host/docs/me'),
           headers: {
             'Content-Type': 'application/json',
             'x-auth-token': token,
           },
         );
+
+        print('Status Code: ${res.statusCode}');
+        print('Response Body: ${res.body}');
 
         switch (res.statusCode) {
           case 200:
@@ -92,7 +95,7 @@ class DocumentRepository {
           }
             error = ErrorModel(
               error: null, 
-              data: DocumentModel.fromJson(res.body as Map<String, dynamic>),
+              data: document,
               );
 
             break;
