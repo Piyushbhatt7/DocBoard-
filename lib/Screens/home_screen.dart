@@ -57,10 +57,10 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Center(
-        child: 
-        Text(ref.watch(userProvider)!.email),
-      ),
+      body:FutureBuilder(
+        future: ref.watch(documentRepositoryProvider).getDocument(ref.watch(userProvider)!.token), 
+        builder: builder
+        )
     );
   }
 }
