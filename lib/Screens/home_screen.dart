@@ -67,8 +67,15 @@ class HomeScreen extends ConsumerWidget {
         {
           if(snapshot.connectionState == ConnectionState.waiting)
           {
-            return Loader();
+            return const Loader();
           }
+
+          return ListView.builder(
+            itemBuilder: (context, index)
+            {
+              
+            }
+            )
         }
         )
     );
