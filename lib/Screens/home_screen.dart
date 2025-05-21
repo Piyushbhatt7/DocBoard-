@@ -71,6 +71,10 @@ class HomeScreen extends ConsumerWidget {
             return const Loader();
           }
 
+          if (snapshot.data?.data == null || snapshot.data!.data.isEmpty) {
+            return const Center(child: Text('No documents available.'));
+          }
+
           return ListView.builder(
             itemCount: snapshot.data!.data.length,
             itemBuilder: (context, index)
