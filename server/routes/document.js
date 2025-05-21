@@ -29,7 +29,7 @@ documentRouter.get('/docs/me', auth, async (req, res) => {
 
     try {
         let document = await Document.find({uid: req.user});
-        
+        res.json(document);
     }
 
     catch(e)
