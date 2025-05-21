@@ -6,6 +6,7 @@ import 'package:google_docs/models/document_model.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 final documentRepositoryProvider = Provider(
   (ref) => DocumentRepository(
@@ -22,49 +23,31 @@ class DocumentRepository {
     required Client client
     }) : _client = client;
 
-    Future<ErrorModel> createDocument(String token) async {
-      
-      ErrorModel error = ErrorModel(
-        error: 'Some unexpected error occurred', 
-        data: null,
-        );
+   Future<ErrorModel> createDocument(String token) async {
+  ErrorModel error = ErrorModel(error: 'Some error occurred', data: null);
+  try {
+    var res = await http.post(
+      Uri.parse('$host/doc/create'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token,
+      },
+      body: jsonEncode({}),
+    );
 
-       try {
-        
-        var res = await _client.post(
-          Uri.parse('$host/doc/create'),
-          headers: {
-            'Content-Type': 'application/json',
-            'x-auth-token': token,
-          },
-          body: jsonEncode({
-            'createdAt': DateTime.now().millisecondsSinceEpoch,
-          }),
-        );
-
-        switch (res.statusCode) {
-          case 200:
-            error = ErrorModel(
-              error: null, 
-              data: DocumentModel.fromJson(jsonDecode(res.body)),
-              );
-
-            break;
-            default:
-            error = ErrorModel(
-              error: res.body, 
-              data: null,
-              );
-        }
-      
-      } catch (e) {
-        error = ErrorModel(
-          error: e.toString(),
-          data: null,
-        );
-      }
-      return error;
+    if (res.statusCode == 200) {
+      error = ErrorModel(
+        error: null,
+        data: DocumentModel.fromJson(jsonDecode(res.body)),
+      );
+    } else {
+      error = ErrorModel(error: jsonDecode(res.body)['error'], data: null);
     }
+  } catch (e) {
+    error = ErrorModel(error: e.toString(), data: null);
+  }
+  return error;
+}
 
 
      Future<ErrorModel> getDocument(String token) async {

@@ -1,29 +1,22 @@
 const express = require('express');
-const Document = require('../models/document_model');
-const documentRouter = express.Router();
-const auth = require('../middlewares/auth');
-const e = require('express');
+const auth = require('../middleware/auth'); // your middleware to verify JWT
+const Document = require('../models/document');
+const router = express.Router();
 
-
-documentRouter.post('/doc/create', auth, async(req, res) => {
-    try {
-        console.log('Request Body:', req.body);
-        console.log('Authenticated User:', req.user);
-
-        const { createdAt } = req.body;
-        let document = new Document({
-            uid: req.user,
-            title: 'Untitled Document',
-            createdAt,
-        });
-
-        document = await document.save();
-        res.json(document);
-    } catch (e) {
-        console.error(e.message);
-        res.status(500).json({ error: e.message });
-    }
+router.post('/doc/create', auth, async (req, res) => {
+  try {
+    const newDoc = new Document({
+      uid: req.user, // comes from your auth middleware
+      title: 'Untitled Document',
+    });
+    const savedDoc = await newDoc.save();
+    res.status(200).json(savedDoc);
+  } catch (e) {
+    console.error('Document creation error:', e);
+    res.status(500).json({ error: 'Server error while creating document' });
+  }
 });
+
 
 
 documentRouter.get('/docs/me', auth, async (req, res) => {
