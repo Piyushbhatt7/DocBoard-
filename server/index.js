@@ -5,13 +5,14 @@ const cors = require('cors');
 const authRouter = require("./routes/auth");
 const documentRouter = require("./routes/document");
 
+
 const PORT = process.env.PORT || 3001;
 
 const app = express();
 
 // Configure CORS for web development
 app.use(cors({
-    origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:3000','http://localhost:3001', 'http://127.0.0.1:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'x-auth-token', 'Accept']
