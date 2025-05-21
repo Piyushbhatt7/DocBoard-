@@ -88,7 +88,7 @@ class DocumentRepository {
           case 200:
           List<DocumentModel> document = [];
           for (int i = 0; i<jsonDecode(res.body).length; i++) {
-
+            document.add(DocumentModel.fromJson(jsonDecode(res.body)[i]));
           }
             error = ErrorModel(
               error: null, 
