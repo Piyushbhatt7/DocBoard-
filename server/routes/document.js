@@ -25,4 +25,6 @@ documentRouter.post('/doc/create', auth, async(req, res) => {
     }
 }); 
 
+documentRouter.get('/docs/me', auth, async)
+
 module.exports = documentRouter;
