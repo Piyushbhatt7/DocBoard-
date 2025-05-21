@@ -6,9 +6,10 @@ const e = require('express');
 
 
 documentRouter.post('/doc/create', auth, async(req, res) => {
+    try {
+        console.log('Request Body:', req.body);
+        console.log('Authenticated User:', req.user);
 
-    try{
-        
         const { createdAt } = req.body;
         let document = new Document({
             uid: req.user,
@@ -18,12 +19,12 @@ documentRouter.post('/doc/create', auth, async(req, res) => {
 
         document = await document.save();
         res.json(document);
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).json({ error: e.message });
     }
-    catch(e)
-    {
-        res.status(500).json({error: e.message})
-    }
-}); 
+});
+
 
 documentRouter.get('/docs/me', auth, async (req, res) => {
     try {
