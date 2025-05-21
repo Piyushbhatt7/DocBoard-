@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
+import 'package:google_docs/common/widgets/loader.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 import 'package:google_docs/repository/document_repository.dart';
@@ -66,7 +67,7 @@ class HomeScreen extends ConsumerWidget {
         {
           if(snapshot.connectionState == ConnectionState.waiting)
           {
-            
+            return Loader();
           }
         }
         )
