@@ -87,7 +87,8 @@ class DocumentRepository {
         switch (res.statusCode) {
           case 200:
           List<DocumentModel> document = [];
-          for (var doc in jsonDecode(res.body)) {
+          for (int i = 0; i<jsonDecode(res.body).length; i++) {
+
           }
             error = ErrorModel(
               error: null, 
