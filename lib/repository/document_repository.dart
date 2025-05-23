@@ -35,7 +35,7 @@ class DocumentRepository {
       body: jsonEncode({
         'title': 'Untitled Document',
         'content': [],
-        'createdAt': DateTime.now().toIso8601String(),
+        'createdAt': DateTime.now().millisecondsSinceEpoch,
       }),
     );
 
