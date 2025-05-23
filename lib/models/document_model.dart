@@ -9,7 +9,7 @@ class DocumentModel {
       title: json['title'] as String,
       uid: json['uid'] as String,
       content: json['content'] as List,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt'] as int),
       id: json['_id'] as String,
     );
   }
