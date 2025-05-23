@@ -32,7 +32,11 @@ class DocumentRepository {
         'Content-Type': 'application/json',
         'x-auth-token': token,
       },
-      body: jsonEncode({}),
+      body: jsonEncode({
+        'title': 'Untitled Document',
+        'content': [],
+        'createdAt': DateTime.now().toIso8601String(),
+      }),
     );
 
     if (res.statusCode == 200) {
