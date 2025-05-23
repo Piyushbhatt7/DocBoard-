@@ -8,7 +8,7 @@ const documentRouter = require("./routes/document");
 
 const PORT = process.env.PORT || 3001;      
 
-const app = express();
+const app = express(); 
 
 // Configure CORS for web development
 app.use(cors({
