@@ -19,23 +19,20 @@ class HomeScreen extends ConsumerWidget {
   }
 
   void createDocument(BuildContext context, WidgetRef ref) async {
-
     String token = ref.read(userProvider)!.token;
     final navigator = Routemaster.of(context);
     final snackbar = ScaffoldMessenger.of(context);
 
     final errorModel = await ref.read(documentRepositoryProvider).createDocument(token);
 
-    if(errorModel.data!=null) {
+    if (errorModel.data != null) {
       navigator.push('/document/${errorModel.data.id}');
-    }
-
-    else {
+    } else {
       snackbar.showSnackBar(
         SnackBar(
-          content: Text(
-            errorModel.error!
-            )));
+          content: Text(errorModel.error ?? 'Failed to create document'),
+        ),
+      );
     }
   }
 
