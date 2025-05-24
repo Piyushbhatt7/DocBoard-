@@ -108,15 +108,14 @@ class DocumentRepository {
   ErrorModel error = ErrorModel(error: 'Some error occurred', data: null);
   try {
     var res = await http.post(
-      Uri.parse('$host/api/doc/create'),
+      Uri.parse('$host/api/doc/title'),
       headers: {
         'Content-Type': 'application/json',
         'x-auth-token': token,
       },
       body: jsonEncode({
-        'title': 'Untitled Document',
-        'content': [],
-        'createdAt': DateTime.now().millisecondsSinceEpoch,
+        'title': title,
+        'id': id,
       }),
     );
 
