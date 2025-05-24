@@ -80,6 +80,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                     ),
                     contentPadding: EdgeInsets.only(left: 10.0)
                    ),
+                   onSubmitted: (value) {
+                     updateTitle(ref, value);
+                   },
                 ),
               )
             ],
