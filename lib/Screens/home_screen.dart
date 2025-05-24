@@ -36,6 +36,11 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
+  void navigateToDocument(BuildContext context, String documentId)
+  {
+    
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
