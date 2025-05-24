@@ -43,7 +43,6 @@ documentRouter.post('/doc/title', auth, async(req, res) => {
         const { id, title } = req.body;
         const document = await Document.finndByIdAndUpdate(id, { title },);
 
-        document = await document.save();
         res.json(document);
     } catch (e) {
         console.error(e.message);

@@ -102,4 +102,36 @@ class DocumentRepository {
       return error;
     }
 
+
+
+     Future<ErrorModel> updateDocument(String token) async {
+  ErrorModel error = ErrorModel(error: 'Some error occurred', data: null);
+  try {
+    var res = await http.post(
+      Uri.parse('$host/api/doc/create'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token,
+      },
+      body: jsonEncode({
+        'title': 'Untitled Document',
+        'content': [],
+        'createdAt': DateTime.now().millisecondsSinceEpoch,
+      }),
+    );
+
+    if (res.statusCode == 200) {
+      error = ErrorModel(
+        error: null,
+        data: DocumentModel.fromJson(jsonDecode(res.body)),
+      );
+    } else {
+      error = ErrorModel(error: jsonDecode(res.body)['error'], data: null);
+    }
+  } catch (e) {
+    error = ErrorModel(error: e.toString(), data: null);
+  }
+  return error;
+}
+
 }
