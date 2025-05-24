@@ -104,7 +104,7 @@ class DocumentRepository {
 
 
 
-     Future<ErrorModel> updateDocument(String token) async {
+     Future<ErrorModel> updateDocument({ required String token, required String id, required String title }) async {
   ErrorModel error = ErrorModel(error: 'Some error occurred', data: null);
   try {
     var res = await http.post(
