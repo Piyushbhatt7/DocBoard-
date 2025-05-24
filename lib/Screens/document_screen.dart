@@ -59,7 +59,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                   border: InputBorder.none,
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: KblueColor,
+                      color: KblueColor, 
                     )
                   ),
                   contentPadding: EdgeInsets.only(left: 10.0)
