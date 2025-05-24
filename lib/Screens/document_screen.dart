@@ -74,7 +74,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               border: Border.all()
             ),
           ),
-          prefferedSize: const Size.fromHeight(1),
+          preferredSize: const Size.fromHeight(1),
         ),
       ),
       body: Center(child: Text(widget.id)),
