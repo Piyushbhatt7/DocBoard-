@@ -84,6 +84,13 @@ class HomeScreen extends ConsumerWidget {
                   return SizedBox(
                     height: 50,
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        side:  BorderSide(
+                          color: Colors.black,
+                          width: 1
+                        ),
+                        
+                      ),
                       child: Center(
                         child: Text(
                           document.title, style: TextStyle(
