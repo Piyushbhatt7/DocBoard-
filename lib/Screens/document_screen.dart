@@ -46,7 +46,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           ),
         ],
         title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 9.0),
           child: Row(
             children: [
               Image.asset('assets/images/brand_image.png', height: 50, fit: BoxFit.fill,),
