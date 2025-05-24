@@ -31,7 +31,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                     icon: Icon(Icons.lock, color: kWhiteColor, size: 16,),
                     label: const Text('Share', style: TextStyle(color: kWhiteColor),),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.lightBlue,
+                      backgroundColor: KblueColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
