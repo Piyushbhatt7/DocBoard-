@@ -12,6 +12,8 @@ class DocumentScreen extends ConsumerStatefulWidget {
 }
 
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
+
+  TextEditingController titleController = TextEditingController(text: 'Untitled Document');
   @override
   Widget build(BuildContext context) {
     // Example: Accessing a provider
