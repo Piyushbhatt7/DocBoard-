@@ -47,6 +47,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               width: 100,
               child: TextField(
                  decoration: const InputDecoration(
+                  border: InputBorder.none,
                   contentPadding: EdgeInsets.only(left: 10.0)
                  ),
               ),
