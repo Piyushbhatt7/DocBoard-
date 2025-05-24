@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 
@@ -16,11 +15,12 @@ class DocumentScreen extends ConsumerStatefulWidget {
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
-  final quill.QuillController _controller = quill.QuillController.basic();
+  QuillController _controller = QuillController.basic();
 
   @override
   void dispose() {
     titleController.dispose();
+    _controller.dispose();
     super.dispose();
   }
   @override
@@ -86,15 +86,18 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           ),
         ),
       ),
-       body: Column(
+      body: Column(
         children: [
-          quill.QuillToolbar.basic(controller: _controller),
-          Expanded(
-            child: quill.QuillEditor.basic(
-              controller: _controller,
-              readOnly: false, // true for view only mode
-            ),
-          ),
+          QuillSimpleToolbar(
+  controller: _controller,
+  config: const QuillSimpleToolbarConfig(),
+),
+Expanded(
+  child: QuillEditor.basic(
+    controller: _controller,
+    config: const QuillEditorConfig(),
+  ),
+)
         ],
       ),
     );
