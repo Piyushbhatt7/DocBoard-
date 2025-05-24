@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_docs/colors.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -17,6 +18,13 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     // final myValue = ref.watch(myProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kWhiteColor,
+        elevation: 5,
+        actions: [
+          
+        ],
+      ),
       body: Center(
         child: Text(
           widget.id,
