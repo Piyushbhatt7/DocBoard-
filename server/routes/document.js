@@ -41,11 +41,7 @@ documentRouter.post('/doc/title', auth, async(req, res) => {
         console.log('Authenticated User:', req.user);
 
         const { id, title } = req.body;
-        let document = new Document({
-            uid: req.user,
-            title: 'Untitled Document',
-            createdAt,
-        });
+        const document = await Document.finndByIdAndUpdate(id, { title },);
 
         document = await document.save();
         res.json(document);
