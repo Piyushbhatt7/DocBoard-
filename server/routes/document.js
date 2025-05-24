@@ -35,5 +35,24 @@ documentRouter.get('/docs/me', auth, async (req, res) => {
     }
 });
 
+documentRouter.post('/doc/title', auth, async(req, res) => {
+    try {
+        console.log('Request Body:', req.body);
+        console.log('Authenticated User:', req.user);
+
+        const { id, title } = req.body;
+        let document = new Document({
+            uid: req.user,
+            title: 'Untitled Document',
+            createdAt,
+        });
+
+        document = await document.save();
+        res.json(document);
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).json({ error: e.message });
+    }
+});
 
 module.exports = documentRouter;
