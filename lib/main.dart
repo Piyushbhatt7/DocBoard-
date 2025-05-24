@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/Screens/router.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(
@@ -50,6 +51,13 @@ class _MyAppState extends ConsumerState<MyApp> {
           return loggedOutRoute;
        }),
       routeInformationParser: const RoutemasterParser(),
+
+        localizationsDelegates: const [
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    quill.FlutterQuillLocalizations.delegate, // Required by flutter_quill
+  ],
     );
   }
 }
