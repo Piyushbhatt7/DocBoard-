@@ -39,7 +39,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         ],
         title: Row(
           children: [
-            Image.asset('assets/images/brand image.png', height: 50,)
+            Image.asset('assets/images/brand_image.png',)
           ],
         ),
       ),
