@@ -22,7 +22,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         backgroundColor: kWhiteColor,
         elevation: 5,
         actions: [
-          
+          ElevatedButton.icon(onPressed: ()
+          {
+
+          }, 
+          icon: Icon(Icons.lock),
+          label: label)
         ],
       ),
       body: Center(
