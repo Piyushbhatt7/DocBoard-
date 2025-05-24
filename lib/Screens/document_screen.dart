@@ -85,20 +85,27 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          quill.QuillSimpleToolbar(
-            controller: _controller
-          ),
-          Expanded(
-            child: SizedBox(
-              width: 750,
-              child: quill.QuillEditor.basic(
-                controller: _controller,
-                         // readOnly: false
-              ),
-            ))
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 10,),
+            quill.QuillSimpleToolbar(
+              controller: _controller
+            ),
+            Expanded(
+              child: SizedBox(
+                width: 750,
+                child: Card(
+                  color: kWhiteColor,
+                  elevation: 5,
+                  child: quill.QuillEditor.basic(
+                    controller: _controller,
+                             // readOnly: false
+                  ),
+                ),
+              ))
+          ],
+        ),
       ),
     );
   }
