@@ -68,8 +68,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             )
           ],
         ),
-        bottom: PreferredDize(
-          child: ,
+        bottom: PreferredSize(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all()
+            ),
+          ),
           prefferedSize: const Size.fromHeight(1),
         ),
       ),
