@@ -73,6 +73,7 @@ class HomeScreen extends ConsumerWidget {
           }
 
           return SizedBox(
+            width: 600,
             child: ListView.builder(
               itemCount: snapshot.data!.data.length,
               itemBuilder: (context, index)
