@@ -72,26 +72,28 @@ class HomeScreen extends ConsumerWidget {
             return const Center(child: Text('No documents available.'));
           }
 
-          return ListView.builder(
-            itemCount: snapshot.data!.data.length,
-            itemBuilder: (context, index)
-            {
-              DocumentModel document = snapshot.data!.data[index];
-
-              return SizedBox(
-                height: 50,
-                child: Card(
-                  child: Center(
-                    child: Text(
-                      document.title, style: TextStyle(
-                        fontSize: 17,
+          return SizedBox(
+            child: ListView.builder(
+              itemCount: snapshot.data!.data.length,
+              itemBuilder: (context, index)
+              {
+                DocumentModel document = snapshot.data!.data[index];
+            
+                return SizedBox(
+                  height: 50,
+                  child: Card(
+                    child: Center(
+                      child: Text(
+                        document.title, style: TextStyle(
+                          fontSize: 17,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }
-            );
+                );
+              }
+              ),
+          );
         }
         )
     );
