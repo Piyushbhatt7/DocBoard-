@@ -87,15 +87,13 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       ),
       body: Column(
         children: [
-          quill.QuillToolbar.basic(
+          quill.QuillSimpleToolbar(
             controller: _controller
           ),
           Expanded(
-            child: Container(
-              child: quill.QuillEditor.basic(
-                controller: _controller,
-              readOnly: false
-              ),
+            child: quill.QuillEditor.basic(
+              controller: _controller,
+           // readOnly: false
             ))
         ],
       ),
