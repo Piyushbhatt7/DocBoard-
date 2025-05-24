@@ -72,20 +72,20 @@ class HomeScreen extends ConsumerWidget {
             return const Center(child: Text('No documents available.'));
           }
 
-          return InkWell(
-            onTap: () {
+          return Center(
+            child: SizedBox(
+              width: 600,
+              child: ListView.builder(
+                itemCount: snapshot.data!.data.length,
+                itemBuilder: (context, index)
+                {
+                  DocumentModel document = snapshot.data!.data[index];
               
-            },
-            child: Center(
-              child: SizedBox(
-                width: 600,
-                child: ListView.builder(
-                  itemCount: snapshot.data!.data.length,
-                  itemBuilder: (context, index)
-                  {
-                    DocumentModel document = snapshot.data!.data[index];
-                
-                    return SizedBox(
+                  return InkWell(
+                    onTap: () {
+                      
+                    },
+                    child: SizedBox(
                       height: 50,
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -103,10 +103,10 @@ class HomeScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
-                    );
-                  }
-                  ),
-              ),
+                    ),
+                  );
+                }
+                ),
             ),
           );
         }
