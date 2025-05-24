@@ -27,7 +27,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
           }, 
           icon: Icon(Icons.lock),
-          label: label)
+          label: const Text('Share'))
         ],
       ),
       body: Center(
