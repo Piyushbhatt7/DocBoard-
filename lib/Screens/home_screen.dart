@@ -89,7 +89,7 @@ class HomeScreen extends ConsumerWidget {
                           color: Colors.black,
                           width: 1
                         ),
-                        
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Center(
                         child: Text(
