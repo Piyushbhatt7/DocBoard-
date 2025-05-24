@@ -91,9 +91,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             controller: _controller
           ),
           Expanded(
-            child: quill.QuillEditor.basic(
-              controller: _controller,
-           // readOnly: false
+            child: SizedBox(
+              width: 750,
+              child: quill.QuillEditor.basic(
+                controller: _controller,
+                         // readOnly: false
+              ),
             ))
         ],
       ),
