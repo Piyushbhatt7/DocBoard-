@@ -26,8 +26,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                   onPressed: () {
         
                   }, 
-                  icon: Icon(Icons.lock,),
-                  label: const Text('Share'),
+                  icon: Icon(Icons.lock, color: kWhiteColor,),
+                  label: const Text('Share', style: TextStyle(color: kWhiteColor),),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightBlue,
                     shape: RoundedRectangleBorder(
