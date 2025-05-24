@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 
@@ -83,7 +84,19 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           ),
         ),
       ),
-      body: Center(child: Text(widget.id)),
+      body: Column(
+        children: [
+          QuillToolbar.basic(
+            controller: _controller
+          ),
+          Expanded(
+            child: Container(
+              child: QuillEditor.basic(controller: _controller,
+              readOnly: false
+              ),
+            ))
+        ],
+      ),
     );
   }
 }
