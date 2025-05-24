@@ -39,7 +39,18 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         ],
         title: Row(
           children: [
-            Image.asset('assets/images/brand_image.png', height: 50,),
+            Image.asset('assets/images/brand_image.png', height: 50, fit: BoxFit.fill,),
+
+            const SizedBox(width: 10,),
+
+            SizedBox(
+              width: 100,
+              child: TextField(
+                 decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.only(left: 10.0)
+                 ),
+              ),
+            )
           ],
         ),
       ),
