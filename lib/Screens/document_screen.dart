@@ -45,28 +45,31 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             ),
           ),
         ],
-        title: Row(
-          children: [
-            Image.asset('assets/images/brand_image.png', height: 50, fit: BoxFit.fill,),
-
-            const SizedBox(width: 10,),
-
-            SizedBox(
-              width: 180,
-              child: TextField(
-                controller: titleController,
-                 decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: KblueColor, 
-                    )
-                  ),
-                  contentPadding: EdgeInsets.only(left: 10.0)
-                 ),
-              ),
-            )
-          ],
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            children: [
+              Image.asset('assets/images/brand_image.png', height: 50, fit: BoxFit.fill,),
+          
+              const SizedBox(width: 10,),
+          
+              SizedBox(
+                width: 180,
+                child: TextField(
+                  controller: titleController,
+                   decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: KblueColor, 
+                      )
+                    ),
+                    contentPadding: EdgeInsets.only(left: 10.0)
+                   ),
+                ),
+              )
+            ],
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
