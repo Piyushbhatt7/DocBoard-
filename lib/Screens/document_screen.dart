@@ -15,6 +15,7 @@ class DocumentScreen extends ConsumerStatefulWidget {
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
+  quill.QuillController _controller = quill.QuillController.basic();
 
   @override
   void dispose() {
@@ -91,8 +92,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           ),
           Expanded(
             child: Container(
-              child: quill.QuillEditor.basic(controller: _controller,
-              readOnly: false),
+              child: quill.QuillEditor.basic(
+                controller: _controller,
+              readOnly: false
+              ),
             ))
         ],
       ),
