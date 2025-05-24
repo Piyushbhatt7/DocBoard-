@@ -88,7 +88,7 @@ class HomeScreen extends ConsumerWidget {
               
                   return InkWell(
                     onTap: () {
-                      
+                      navigateToDocument(context, document.id);
                     },
                     child: SizedBox(
                       height: 50,
