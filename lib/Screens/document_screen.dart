@@ -68,6 +68,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             )
           ],
         ),
+        bottom: PreferredDize(
+          child: ,
+          prefferedSize: const Size.fromHeight(1),
+        ),
       ),
       body: Center(child: Text(widget.id)),
     );
