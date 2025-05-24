@@ -22,29 +22,28 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         backgroundColor: kWhiteColor,
         elevation: 5,
         actions: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ElevatedButton.icon(
-                    onPressed: () {
-          
-                    }, 
-                    icon: Icon(Icons.lock, color: kWhiteColor, size: 16,),
-                    label: const Text('Share', style: TextStyle(color: kWhiteColor),),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: KblueColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-        ),
-                ],
-      ),
-      body: Center(
-        child: Text(
-          widget.id,
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.lock, color: kWhiteColor, size: 16),
+              label: const Text('Share', style: TextStyle(color: kWhiteColor)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: KblueColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+          ),
+        ],
+        title: Row(
+          children: [
+            
+          ],
         ),
       ),
+      body: Center(child: Text(widget.id)),
     );
   }
 }
