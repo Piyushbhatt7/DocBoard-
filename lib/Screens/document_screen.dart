@@ -22,19 +22,22 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         backgroundColor: kWhiteColor,
         elevation: 5,
         actions: [
-        ElevatedButton.icon(
-                  onPressed: () {
-        
-                  }, 
-                  icon: Icon(Icons.lock, color: kWhiteColor,),
-                  label: const Text('Share', style: TextStyle(color: kWhiteColor),),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightBlue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: ElevatedButton.icon(
+                    onPressed: () {
+          
+                    }, 
+                    icon: Icon(Icons.lock, color: kWhiteColor, size: 16,),
+                    label: const Text('Share', style: TextStyle(color: kWhiteColor),),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
-                ),
+        ),
                 ],
       ),
       body: Center(
