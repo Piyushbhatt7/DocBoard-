@@ -14,6 +14,12 @@ class DocumentScreen extends ConsumerStatefulWidget {
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     // Example: Accessing a provider
@@ -21,8 +27,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kWhiteColor,
-        elevation: 5,
+        backgroundColor: Colors.white,
+        elevation: 1,
         actions: [
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -46,10 +52,16 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             const SizedBox(width: 10,),
 
             SizedBox(
-              width: 100,
+              width: 180,
               child: TextField(
+                controller: titleController,
                  decoration: const InputDecoration(
                   border: InputBorder.none,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: KblueColor,
+                    )
+                  ),
                   contentPadding: EdgeInsets.only(left: 10.0)
                  ),
               ),
