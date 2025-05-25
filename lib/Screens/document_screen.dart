@@ -79,9 +79,11 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
           if(event.item3 == quill.ChangeSource.local)
           {
-            Map<String dynamic> map = {
-              
-            }
+            Map<String, dynamic> map = {
+              'delta': event.item2,
+              'room': widget.id,
+            };
+            socketRepository.typing(map);
           }
         });
       }
