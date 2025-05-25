@@ -16,6 +16,9 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  // Change from final to late to allow reassignment
+  late UniqueKey _refreshKey = UniqueKey();
+
   void signOut() {
     ref.read(authRepositoryProvider).signOut();
     ref.read(userProvider.notifier).update((state) => null);
@@ -29,6 +32,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final errorModel = await ref.read(documentRepositoryProvider).createDocument(token);
 
     if (errorModel.data != null) {
+      // Force refresh the document list
+      setState(() {
+        _refreshKey = UniqueKey();
+      });
       navigator.push('/document/${errorModel.data.id}');
     } else {
       snackbar.showSnackBar(
@@ -41,9 +48,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void navigateToDocument(String documentId) async {
     await Routemaster.of(context).push('/document/$documentId');
-    // Force a rebuild of the FutureBuilder to refresh the document list
+    // Force refresh the document list when returning
     if (mounted) {
-      setState(() {});
+      setState(() {
+        _refreshKey = UniqueKey();
+      });
     }
   }
 
@@ -65,6 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       body: FutureBuilder<ErrorModel?>(
+        key: _refreshKey, // Add key to force rebuild
         future: ref.watch(documentRepositoryProvider)
           .getDocument(ref.watch(userProvider)!.token),
         builder: (context, snapshot) {
@@ -79,7 +89,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           return RefreshIndicator(
             onRefresh: () async {
               if (mounted) {
-                setState(() {});
+                setState(() {
+                  _refreshKey = UniqueKey();
+                });
               }
             },
             child: Center(
