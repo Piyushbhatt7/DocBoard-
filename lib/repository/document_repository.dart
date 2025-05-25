@@ -56,22 +56,25 @@ class DocumentRepository {
         headers: {'Content-Type': 'application/json', 'x-auth-token': token},
       );
 
-      print('Status Code: ${res.statusCode}');
-      print('Response Body: ${res.body}');
+      print('Get Documents Status Code: ${res.statusCode}');
+      print('Get Documents Response Body: ${res.body}');
 
       switch (res.statusCode) {
         case 200:
           List<DocumentModel> documents = [];
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
-            documents.add(DocumentModel.fromJson(jsonDecode(res.body)[i]));
+          final jsonData = jsonDecode(res.body);
+          if (jsonData is List) {
+            for (var doc in jsonData) {
+              documents.add(DocumentModel.fromJson(doc));
+            }
           }
           error = ErrorModel(error: null, data: documents);
-
           break;
         default:
           error = ErrorModel(error: res.body, data: null);
       }
     } catch (e) {
+      print('Error in getDocument: $e');
       error = ErrorModel(error: e.toString(), data: null);
     }
     return error;
