@@ -87,7 +87,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }
 
           return RefreshIndicator(
-            onRefresh: () async {     
+            onRefresh: () async {      
               if (mounted) {
                 setState(() {
                   _refreshKey = UniqueKey();
