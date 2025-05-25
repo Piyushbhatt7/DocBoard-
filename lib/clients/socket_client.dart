@@ -2,23 +2,21 @@ import 'dart:io';
 
 import 'package:google_docs/constants.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketClient {
 
   io.Socket? socket;
   static SocketClient? _instance;
 
-  SocketClient._internal() {
-    socket = io.io(host, <String, dynamic>{
-      'transports': ['websocket', 'polling'],
-      'autoConnect': true,
-      'reconnection': true,
-      'reconnectionAttempts': 10,
-      'reconnectionDelay': 1000,
-      'reconnectionDelayMax': 5000,
-      'timeout': 20000,
-      'forceNew': true,
-    });
+    SocketClient._internal() {
+    socket = IO.io(
+      'http://<YOUR_IP>:3001', // replace <YOUR_IP> with actual IP, not localhost if testing on phone
+      IO.OptionBuilder()
+        .setTransports(['websocket']) // for Flutter compatibility
+        .disableAutoConnect() // connect manually
+        .build()
+    );
     
     socket!.onConnect((_) {
       print('Socket connected successfully');
