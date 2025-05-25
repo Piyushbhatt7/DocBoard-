@@ -86,7 +86,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             return const Center(child: Text('No documents available.'));
           }
 
-          return RefreshIndicator(
+          return RefreshIndicator( 
             onRefresh: () async {          
               if (mounted) { 
                 setState(() {       
