@@ -73,7 +73,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('typing...', (data) => {
-        socket.broadcast.to
+        socket.broadcast.to(data.room).emit('changes', data);
     })
 });
 
