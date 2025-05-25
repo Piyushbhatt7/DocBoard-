@@ -76,6 +76,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     socketRepository.socketClient.onDisconnect((_) {
       print('Socket disconnected in document screen');
     });
+
+    print('Emitted join event');
+    print('Emitted changes event');
   }
 
   void fetchDocumentData() async {
