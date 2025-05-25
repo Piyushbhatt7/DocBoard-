@@ -70,8 +70,15 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         if (mounted) {
           setState(() {});
         }
+
+        _controller.document.changes.listen((event)
+        {
+          
+        })
       }
-    } catch (e) {
+    } 
+    
+    catch (e) {
       print('Error in fetchDocumentData: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
