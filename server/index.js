@@ -71,6 +71,10 @@ io.on('connection', (socket) => {
         socket.join(documentId);
         console.log("joined");
     });
+
+    socket.on('typing...', (data) => {
+        socket.broadcast.to
+    })
 });
 
 
