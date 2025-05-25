@@ -58,11 +58,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         _controller = quill.QuillController(
           document: errorModel!.data.content.isEmpty
           ? quill.Document()
-          : quill.Document.fromDelta(
-            quill.Delta.fromJson(errorModel!.data.content),
-          ),
+          : quill.Document.fromJson(errorModel!.data.content),
           selection: const TextSelection.collapsed(offset: 0),
-          );
+        );
         if (mounted) {
           setState(() {});
         }
