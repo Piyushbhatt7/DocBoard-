@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 import 'package:google_docs/common/widgets/loader.dart';
@@ -37,7 +38,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
     socketRepository.changeListener((data) {
       _controller?.compose(
-        delta,
+        Delta.fromJson(data['delta']),
         textSelection, 
         source
          )
@@ -135,7 +136,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     // final myValue = ref.watch(myProvider);
     if(_controller == null)
     {
-      return Scaffold(
+      return const Scaffold(
         body: Loader(),
       );
     }
