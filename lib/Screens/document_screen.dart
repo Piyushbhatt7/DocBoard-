@@ -39,9 +39,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     socketRepository.changeListener((data) {
       _controller?.compose(
         Delta.fromJson(data['delta']),
-        textSelection, 
-        source
-         )
+        _controller?.selection ?? const TextSelection.collapsed(offset: 0), 
+        quill.ChangeSource.remote,
+         );
     });
   }
 
