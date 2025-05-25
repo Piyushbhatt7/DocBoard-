@@ -4,11 +4,15 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const authRouter = require("./routes/auth");
 const documentRouter = require("./routes/document");
+const http = require('http');
 
 
 const PORT = process.env.PORT || 3001;      
 
 const app = express();    
+
+var server = http.createServer(app);
+var io = require('socket.io')(server);
 
 // Configure CORS for web development
 app.use(cors({
