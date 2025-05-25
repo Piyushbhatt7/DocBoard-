@@ -31,7 +31,11 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   }
 
   void fetchDocumentData() async {
-    ErrorModel errorModel = await ref.read(documentRepositoryProvider).getDocumentById(token, id)
+    ErrorModel errorModel = await ref.read(documentRepositoryProvider)
+    .getDocumentById(ref
+    .read(userProvider)!
+    .token, widget.id
+    );
   }
 
   @override
