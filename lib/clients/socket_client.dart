@@ -11,7 +11,7 @@ class SocketClient {
 
     SocketClient._internal() {
     socket = IO.io(
-      'http://<YOUR_IP>:3001', // replace <YOUR_IP> with actual IP, not localhost if testing on phone
+      'http://192.168.56.1',
       IO.OptionBuilder()
         .setTransports(['websocket']) // for Flutter compatibility
         .disableAutoConnect() // connect manually
