@@ -32,15 +32,35 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   }
 
   void fetchDocumentData() async {
-    errorModel = await ref.read(documentRepositoryProvider)
-    .getDocumentById(ref
-    .read(userProvider)!
-    .token, widget.id
-    );
+    try {
+      errorModel = await ref.read(documentRepositoryProvider)
+        .getDocumentById(ref.read(userProvider)!.token, widget.id);
 
-    if(errorModel!.data != null )
-    {
-      titleController.text = (errorModel!.data as DocumentModel).title;
+      if (errorModel!.error != null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorModel!.error!),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } else if (errorModel!.data != null) {
+        titleController.text = (errorModel!.data as DocumentModel).title;
+        if (mounted) {
+          setState(() {});
+        }
+      }
+    } catch (e) {
+      print('Error in fetchDocumentData: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading document: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -50,15 +70,46 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     super.dispose();
   }
 
-  void updateTitle(WidgetRef ref, String title)
-  {
-    ref.read(documentRepositoryProvider).updateTitle(
-      token: ref.read(userProvider)!
-      .token, 
-      id: widget.id, 
-      title: title
+  void updateTitle(WidgetRef ref, String title) async {
+    if (title.trim().isEmpty) {
+      return;
+    }
+
+    try {
+      final errorModel = await ref.read(documentRepositoryProvider).updateTitle(
+        token: ref.read(userProvider)!.token, 
+        id: widget.id, 
+        title: title
       );
+
+      if (errorModel.error != null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorModel.error!),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } else {
+        // Update the local title controller
+        titleController.text = title;
+        // Refresh the document data after updating the title
+        fetchDocumentData();
+      }
+    } catch (e) {
+      print('Error in updateTitle: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error updating title: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     // Example: Accessing a provider
@@ -96,7 +147,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                 width: 180,
                 child: TextField(
                   controller: titleController,
-                   decoration: const InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -104,10 +155,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                       )
                     ),
                     contentPadding: EdgeInsets.only(left: 10.0)
-                   ),
-                   onSubmitted: (value) {
-                     updateTitle(ref, value);
-                   },
+                  ),
+                  onSubmitted: (value) {
+                    if (value.trim().isNotEmpty) {
+                      updateTitle(ref, value);
+                    }
+                  },
                 ),
               )
             ],
