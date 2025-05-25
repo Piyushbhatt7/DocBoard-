@@ -20,7 +20,7 @@ class DocumentScreen extends ConsumerStatefulWidget {
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
-  quill.QuillController _controller = quill.QuillController.basic();
+  quill.QuillController? _controller;
   ErrorModel? errorModel;
   SocketRepository socketRepository = SocketRepository();
 
@@ -31,6 +31,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     socketRepository.joinRoom(widget.id);
     fetchDocumentData();
     super.initState();
+
+    socketRepository.changeListener((data) {
+
+    });
   }
 
   void fetchDocumentData() async {
@@ -49,6 +53,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         }
       } else if (errorModel!.data != null) {
         titleController.text = (errorModel!.data as DocumentModel).title;
+        _controller = quill.QuillController(
+          document: errorModel!.data.content.isEmpty
+          ? quill.Document()
+          : quill.Document.fromDelta(
+            quill.Delta.fromJson(errorModel!.data.content),
+          ),
+          selection: const TextSelection.collapsed(offset: 0),
+          );
         if (mounted) {
           setState(() {});
         }
