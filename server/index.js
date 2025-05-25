@@ -5,6 +5,7 @@ const cors = require('cors');
 const authRouter = require("./routes/auth");
 const documentRouter = require("./routes/document");
 const http = require('http');
+const { Socket } = require("dgram");
 
 
 const PORT = process.env.PORT || 3001;      
@@ -64,6 +65,10 @@ mongoose.connection.on('disconnected', () => {
 
 // async -> await
 // .then((ref) => print(ref)
+
+io.on('connection', (socket) => {
+    console.log("connected" + socket.id);
+})
 
 
 app.listen(PORT, "0.0.0.0", () => {
