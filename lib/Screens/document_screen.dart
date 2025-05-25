@@ -73,7 +73,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
         _controller!.document.changes.listen((event)
         {
-
+          // 1-> entire content of document
+          // 2-> changes that are made from previous part
+          // 3-> local? -> we have typed 
         });
       }
     } 
