@@ -10,7 +10,16 @@ class SocketClient {
 
   SocketClient._internal() {
     socket = io.io(host, <String, dynamic> {
+
+      'transports': ['websocket'],
+      'autoConnect': false,
       
     });
+    socket!.connect();
+  }
+
+  static SocketClient get instance {
+
+    _instance ??= SocketClient._internal();
   }
 }
