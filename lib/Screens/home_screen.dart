@@ -92,7 +92,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 setState(() {       
                   _refreshKey = UniqueKey();
                 });
-              }   
+              }    
             },
             child: Center(
               child: SizedBox(
