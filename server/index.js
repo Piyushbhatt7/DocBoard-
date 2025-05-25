@@ -67,11 +67,14 @@ mongoose.connection.on('disconnected', () => {
 // .then((ref) => print(ref)
 
 io.on('connection', (socket) => {
-    socket.on('join')
-})
+    socket.on('join', (documentId) => {
+        socket.join(documentId);
+        console.log("joined");
+    });
+});
 
 
-app.listen(PORT, "0.0.0.0", () => {
+server.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log("hey this is changing");
 });
