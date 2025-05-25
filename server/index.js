@@ -67,7 +67,7 @@ mongoose.connection.on('disconnected', () => {
 // .then((ref) => print(ref)
 
 io.on('connection', (socket) => {
-    console.log("connected" + socket.id);
+    socket.on('join')
 })
 
 
