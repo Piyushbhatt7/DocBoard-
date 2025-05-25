@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
+import 'package:google_docs/common/widgets/loader.dart';
 import 'package:google_docs/models/document_model.dart';
 import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/repository/auth_repository.dart';
@@ -35,7 +36,11 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     super.initState();
 
     socketRepository.changeListener((data) {
-
+      _controller?.compose(
+        delta,
+        textSelection, 
+        source
+         )
     });
   }
 
@@ -128,7 +133,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   Widget build(BuildContext context) {
     // Example: Accessing a provider
     // final myValue = ref.watch(myProvider);
-
+    if(_controller == null)
+    {
+      return Scaffold(
+        body: Loader(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -197,7 +207,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           children: [
             const SizedBox(height: 10,),
             quill.QuillSimpleToolbar(
-              controller: _controller
+              controller: _controller!
             ),
             Expanded(
               child: SizedBox(
@@ -208,7 +218,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(30.0),
                     child: quill.QuillEditor.basic(
-                      controller: _controller,
+                      controller: _controller!,
                                // readOnly: false
                     ),
                   ),
