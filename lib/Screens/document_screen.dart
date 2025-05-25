@@ -31,17 +31,22 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     socketRepository.joinRoom(widget.id);
     fetchDocumentData();
     super.initState();
 
     socketRepository.changeListener((data) {
-      _controller?.compose(
-        Delta.fromJson(data['delta']),
-        _controller?.selection ?? const TextSelection.collapsed(offset: 0), 
-        quill.ChangeSource.remote,
-         );
+      if (_controller != null) {
+        try {
+          _controller!.compose(
+            Delta.fromJson(data['delta']),
+            _controller!.selection,
+            quill.ChangeSource.remote,
+          );
+        } catch (e) {
+          print('Error applying remote changes: $e');
+        }
+      }
     });
   }
 
@@ -67,29 +72,26 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           : quill.Document.fromJson(errorModel!.data.content),
           selection: const TextSelection.collapsed(offset: 0),
         );
+        
         if (mounted) {
           setState(() {});
         }
 
-        _controller!.document.changes.listen((event)
-        {
-          // 1-> entire content of document
-          // 2-> changes that are made from previous part
-          // 3-> local? -> we have typed remote?
-
-          if(event.source == quill.ChangeSource.local)
-          {
-            Map<String, dynamic> map = {
-              'delta': event.change,
-              'room': widget.id,
-            };
-            socketRepository.typing(map);
+        _controller!.document.changes.listen((event) {
+          if (event.source == quill.ChangeSource.local) {
+            try {
+              Map<String, dynamic> map = {
+                'delta': event.change.toJson(),
+                'room': widget.id,
+              };
+              socketRepository.typing(map);
+            } catch (e) {
+              print('Error sending changes: $e');
+            }
           }
         });
       }
-    } 
-    
-    catch (e) {
+    } catch (e) {
       print('Error in fetchDocumentData: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
