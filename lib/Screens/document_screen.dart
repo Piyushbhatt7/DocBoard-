@@ -71,10 +71,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           setState(() {});
         }
 
-        _controller.document.changes.listen((event)
+        _controller!.document.changes.listen((event)
         {
-          
-        })
+
+        });
       }
     } 
     
