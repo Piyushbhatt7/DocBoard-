@@ -8,17 +8,20 @@ import 'package:google_docs/repository/auth_repository.dart';
 import 'package:google_docs/repository/document_repository.dart';
 import 'package:routemaster/routemaster.dart';
 
-
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
-  void signOut(WidgetRef ref)
-  {
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  void signOut() {
     ref.read(authRepositoryProvider).signOut();
     ref.read(userProvider.notifier).update((state) => null);
   }
 
-  void createDocument(BuildContext context, WidgetRef ref) async {
+  void createDocument() async {
     String token = ref.read(userProvider)!.token;
     final navigator = Routemaster.of(context);
     final snackbar = ScaffoldMessenger.of(context);
@@ -36,40 +39,36 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
-  void navigateToDocument(BuildContext context, String documentId)
-  {
-    Routemaster.of(context).push('/document/$documentId');
+  void navigateToDocument(String documentId) async {
+    await Routemaster.of(context).push('/document/$documentId');
+    // Force a rebuild of the FutureBuilder to refresh the document list
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         elevation: 0,
         actions: [
-          IconButton(onPressed: ()
-          {
-            createDocument(context, ref);
-          }, icon: const Icon(Icons.add)
+          IconButton(
+            onPressed: createDocument,
+            icon: const Icon(Icons.add)
           ),
-
-           IconButton(onPressed: ()
-          {
-            signOut(ref);
-          }, icon: const Icon(Icons.logout, color: KredColor,),
+          IconButton(
+            onPressed: signOut,
+            icon: const Icon(Icons.logout, color: KredColor,),
           ),
         ],
       ),
-      body:FutureBuilder <ErrorModel?>(
+      body: FutureBuilder<ErrorModel?>(
         future: ref.watch(documentRepositoryProvider)
-        .getDocument(
-          ref.watch(userProvider)!.token), 
-
-        builder: (context, snapshot)
-        {
-          if(snapshot.connectionState == ConnectionState.waiting)
-          {
+          .getDocument(ref.watch(userProvider)!.token),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Loader();
           }
 
@@ -77,45 +76,44 @@ class HomeScreen extends ConsumerWidget {
             return const Center(child: Text('No documents available.'));
           }
 
-          return Center(
-            child: SizedBox(
-              width: 600,
-              child: ListView.builder(
-                itemCount: snapshot.data!.data.length,
-                itemBuilder: (context, index)
-                {
-                  DocumentModel document = snapshot.data!.data[index];
-              
-                  return InkWell(
-                    onTap: () {
-                      navigateToDocument(context, document.id);
-                    },
-                    child: SizedBox(
-                      height: 50,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          side:  BorderSide(
-                           // color: Colors.black,
-                           // width: 1
+          return RefreshIndicator(
+            onRefresh: () async {
+              if (mounted) {
+                setState(() {});
+              }
+            },
+            child: Center(
+              child: SizedBox(
+                width: 600,
+                child: ListView.builder(
+                  itemCount: snapshot.data!.data.length,
+                  itemBuilder: (context, index) {
+                    DocumentModel document = snapshot.data!.data[index];
+                
+                    return InkWell(
+                      onTap: () => navigateToDocument(document.id),
+                      child: SizedBox(
+                        height: 50,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(),
                           ),
-                         // borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            document.title, style: TextStyle(
-                              fontSize: 17,
+                          child: Center(
+                            child: Text(
+                              document.title,
+                              style: TextStyle(fontSize: 17),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }
+                    );
+                  }
                 ),
+              ),
             ),
           );
         }
-        )
+      )
     );
   }
 }
