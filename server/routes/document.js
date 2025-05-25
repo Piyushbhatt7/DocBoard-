@@ -24,14 +24,16 @@ documentRouter.post('/doc/create', auth, async(req, res) => {
     }
 });
 
-documentRouter.get('/docs/:id', auth, async (req, res) => {
+documentRouter.get('/docs/me', auth, async (req, res) => {
     try {
-        const document = await Document.findById(req.params.id);
-        if (!document) {
-            return res.status(404).json({ error: 'Document not found' });
-        }
-        res.json(document);
+        console.log('Fetching documents for user:', req.user);
+        const documents = await Document.find({ 
+            uid: new mongoose.Types.ObjectId(req.user)
+        });
+        console.log('Found documents:', documents);
+        res.json(documents);
     } catch (e) {
+        console.error('Error fetching documents:', e);
         res.status(500).json({ error: e.message });
     }
 });
@@ -59,16 +61,14 @@ documentRouter.post('/doc/title', auth, async(req, res) => {
     }
 });
 
-documentRouter.get('/docs/me', auth, async (req, res) => {
+documentRouter.get('/docs/:id', auth, async (req, res) => {
     try {
-        console.log('Fetching documents for user:', req.user);
-        const documents = await Document.find({ 
-            uid: new mongoose.Types.ObjectId(req.user)
-        });
-        console.log('Found documents:', documents);
-        res.json(documents);
+        const document = await Document.findById(req.params.id);
+        if (!document) {
+            return res.status(404).json({ error: 'Document not found' });
+        }
+        res.json(document);
     } catch (e) {
-        console.error('Error fetching documents:', e);
         res.status(500).json({ error: e.message });
     }
 });
