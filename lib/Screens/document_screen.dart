@@ -11,7 +11,7 @@ import 'package:google_docs/repository/document_repository.dart';
 import 'package:google_docs/repository/socket_repository.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-
+const host = 'http://192.168.1.100:3001';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -35,6 +35,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     print('Initializing document screen for ID: ${widget.id}');
     setupSocketConnection();
     fetchDocumentData();
+    socketRepository.socketClient.emit('test', 'hello from client');
     super.initState();
   }
 
@@ -75,6 +76,20 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
     socketRepository.socketClient.onDisconnect((_) {
       print('Socket disconnected in document screen');
+    });
+
+    socketRepository.socketClient.onConnect((_) {
+      print('Socket connected successfully');
+    });
+    socketRepository.socketClient.onError((err) {
+      print('Socket error: $err');
+    });
+    socketRepository.socketClient.onReconnect((_) {
+      print('Socket reconnected!');
+    });
+
+    socketRepository.socketClient.onReconnectAttempt((data) {
+      print('Socket reconnect attempt: $data');
     });
 
     print('Emitted join event');
