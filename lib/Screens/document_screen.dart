@@ -1,234 +1,134 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
-import 'package:flutter_quill/quill_delta.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_docs/colors.dart';
-import 'package:google_docs/common/widgets/loader.dart';
-import 'package:google_docs/models/document_model.dart';
-import 'package:google_docs/models/error_model.dart';
-import 'package:google_docs/repository/auth_repository.dart';
-import 'package:google_docs/repository/document_repository.dart';
-import 'package:google_docs/repository/socket_repository.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+import 'dart:async';
 
-const host = 'http://192.168.1.100:3001';
+import 'package:docs_clone_flutter/colors.dart';
+import 'package:docs_clone_flutter/common/widgets/loader.dart';
+import 'package:docs_clone_flutter/models/document_model.dart';
+import 'package:docs_clone_flutter/models/error_model.dart';
+import 'package:docs_clone_flutter/repository/auth_repository.dart';
+import 'package:docs_clone_flutter/repository/document_repository.dart';
+import 'package:docs_clone_flutter/repository/socket_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
-
-  const DocumentScreen({super.key, required this.id});
+  const DocumentScreen({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
-  ConsumerState<DocumentScreen> createState() => _DocumentScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _DocumentScreenState();
 }
 
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
-
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
   quill.QuillController? _controller;
   ErrorModel? errorModel;
   SocketRepository socketRepository = SocketRepository();
 
-
   @override
   void initState() {
-    print('Initializing document screen for ID: ${widget.id}');
-    setupSocketConnection();
-    fetchDocumentData();
-    socketRepository.socketClient.emit('test', 'hello from client');
     super.initState();
-  }
-
-  void setupSocketConnection() {
-    if (!socketRepository.isConnected()) {
-      print('Socket not connected, attempting to reconnect...');
-      socketRepository.socketClient.connect();
-    }
-    
     socketRepository.joinRoom(widget.id);
+    fetchDocumentData();
 
     socketRepository.changeListener((data) {
-      print('Received remote changes: $data');
-      if (_controller != null) {
-        try {
-          final delta = Delta.fromJson(data['delta']);
-          print('Applying delta: $delta');
-          _controller!.compose(
-            delta,
-            _controller!.selection,
-            quill.ChangeSource.remote,
-          );
-          print('Successfully applied remote changes');
-        } catch (e) {
-          print('Error applying remote changes: $e');
-          print('Error details: ${e.toString()}');
-        }
-      } else {
-        print('Controller is null, cannot apply changes');
-      }
+      _controller?.compose(
+        quill.Delta.fromJson(data['delta']),
+        _controller?.selection ?? const TextSelection.collapsed(offset: 0),
+        quill.ChangeSource.REMOTE,
+      );
     });
 
-    // Listen for connection state changes
-    socketRepository.socketClient.onConnect((_) {
-      print('Socket connected in document screen');
-      socketRepository.joinRoom(widget.id);
+    Timer.periodic(const Duration(seconds: 2), (timer) {
+      socketRepository.autoSave(<String, dynamic>{
+        'delta': _controller!.document.toDelta(),
+        'room': widget.id,
+      });
     });
-
-    socketRepository.socketClient.onDisconnect((_) {
-      print('Socket disconnected in document screen');
-    });
-
-    socketRepository.socketClient.onConnect((_) {
-      print('Socket connected successfully');
-    });
-    socketRepository.socketClient.onError((err) {
-      print('Socket error: $err');
-    });
-    socketRepository.socketClient.onReconnect((_) {
-      print('Socket reconnected!');
-    });
-
-    socketRepository.socketClient.onReconnectAttempt((data) {
-      print('Socket reconnect attempt: $data');
-    });
-
-    print('Emitted join event');
-    print('Emitted changes event');
   }
 
   void fetchDocumentData() async {
-    try {
-      errorModel = await ref.read(documentRepositoryProvider)
-        .getDocumentById(ref.read(userProvider)!.token, widget.id);
-
-      if (errorModel!.error != null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorModel!.error!),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      } else if (errorModel!.data != null) {
-        titleController.text = (errorModel!.data as DocumentModel).title;
-        _controller = quill.QuillController(
-          document: errorModel!.data.content.isEmpty
-          ? quill.Document()
-          : quill.Document.fromJson(errorModel!.data.content),
-          selection: const TextSelection.collapsed(offset: 0),
+    errorModel = await ref.read(documentRepositoryProvider).getDocumentById(
+          ref.read(userProvider)!.token,
+          widget.id,
         );
-        
-        if (mounted) {
-          setState(() {});
-        }
 
-        _controller!.document.changes.listen((event) {
-          print('Document changed. Source: ${event.source}');
-          if (event.source == quill.ChangeSource.local) {
-            try {
-              final deltaJson = event.change.toJson();
-              print('Sending changes: $deltaJson');
-              Map<String, dynamic> map = {
-                'delta': deltaJson,
-                'room': widget.id,
-              };
-              socketRepository.typing(map);
-              print('Changes sent successfully');
-            } catch (e) {
-              print('Error sending changes: $e');
-              print('Error details: ${e.toString()}');
-            }
-          }
-        });
-      }
-    } catch (e) {
-      print('Error in fetchDocumentData: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error loading document: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+    if (errorModel!.data != null) {
+      titleController.text = (errorModel!.data as DocumentModel).title;
+      _controller = quill.QuillController(
+        document: errorModel!.data.content.isEmpty
+            ? quill.Document()
+            : quill.Document.fromDelta(
+                quill.Delta.fromJson(errorModel!.data.content),
+              ),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+      setState(() {});
     }
+
+    _controller!.document.changes.listen((event) {
+      if (event.item3 == quill.ChangeSource.LOCAL) {
+        Map<String, dynamic> map = {
+          'delta': event.item2,
+          'room': widget.id,
+        };
+        socketRepository.typing(map);
+      }
+    });
   }
 
   @override
   void dispose() {
-    socketRepository.socketClient.off('connect');
-    socketRepository.socketClient.off('disconnect');
-    titleController.dispose();
     super.dispose();
+    titleController.dispose();
   }
 
-  void updateTitle(WidgetRef ref, String title) async {
-    if (title.trim().isEmpty) {
-      return;
-    }
-
-    try {
-      final errorModel = await ref.read(documentRepositoryProvider).updateTitle(
-        token: ref.read(userProvider)!.token, 
-        id: widget.id, 
-        title: title
-      );
-
-      if (errorModel.error != null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorModel.error!),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      } else {
-        // Update the local title controller
-        titleController.text = title;
-        // Refresh the document data after updating the title
-        fetchDocumentData();
-      }
-    } catch (e) {
-      print('Error in updateTitle: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error updating title: $e'),
-            backgroundColor: Colors.red,
-          ),
+  void updateTitle(WidgetRef ref, String title) {
+    ref.read(documentRepositoryProvider).updateTitle(
+          token: ref.read(userProvider)!.token,
+          id: widget.id,
+          title: title,
         );
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Example: Accessing a provider
-    // final myValue = ref.watch(myProvider);
-    if(_controller == null)
-    {
-      return const Scaffold(
-        body: Loader(),
-      );
+    if (_controller == null) {
+      return const Scaffold(body: Loader());
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
+        backgroundColor: kWhiteColor,
+        elevation: 0,
         actions: [
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton.icon(
-              onPressed: () {},
-              icon: Icon(Icons.lock, color: kWhiteColor, size: 16),
-              label: const Text('Share', style: TextStyle(color: kWhiteColor)),
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: 'http://localhost:3000/#/document/${widget.id}')).then(
+                  (value) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Link copied!',
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: const Icon(
+                Icons.lock,
+                size: 16,
+              ),
+              label: const Text('Share'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: KblueColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+                backgroundColor: kBlueColor,
               ),
             ),
           ),
@@ -237,10 +137,16 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           padding: const EdgeInsets.symmetric(vertical: 9.0),
           child: Row(
             children: [
-              Image.asset('assets/images/brand_image.png', height: 50, fit: BoxFit.fill,),
-          
-              const SizedBox(width: 10,),
-          
+              GestureDetector(
+                onTap: () {
+                  Routemaster.of(context).replace('/');
+                },
+                child: Image.asset(
+                  'assets/images/docs-logo.png',
+                  height: 40,
+                ),
+              ),
+              const SizedBox(width: 10),
               SizedBox(
                 width: 180,
                 child: TextField(
@@ -249,18 +155,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                     border: InputBorder.none,
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: KblueColor, 
-                      )
+                        color: kBlueColor,
+                      ),
                     ),
-                    contentPadding: EdgeInsets.only(left: 10.0)
+                    contentPadding: EdgeInsets.only(left: 10),
                   ),
-                  onSubmitted: (value) {
-                    if (value.trim().isNotEmpty) {
-                      updateTitle(ref, value);
-                    }
-                  },
+                  onSubmitted: (value) => updateTitle(ref, value),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -269,9 +171,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: KgreyColor,
+                color: kGreyColor,
                 width: 0.1,
-              )
+              ),
             ),
           ),
         ),
@@ -279,10 +181,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       body: Center(
         child: Column(
           children: [
-            const SizedBox(height: 10,),
-            quill.QuillSimpleToolbar(
-              controller: _controller!
-            ),
+            const SizedBox(height: 10),
+            quill.QuillToolbar.basic(controller: _controller!),
+            const SizedBox(height: 10),
             Expanded(
               child: SizedBox(
                 width: 750,
@@ -293,11 +194,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                     padding: const EdgeInsets.all(30.0),
                     child: quill.QuillEditor.basic(
                       controller: _controller!,
-                               // readOnly: false
+                      readOnly: false,
                     ),
                   ),
                 ),
-              ))
+              ),
+            )
           ],
         ),
       ),
