@@ -67,14 +67,21 @@ mongoose.connection.on('disconnected', () => {
 // .then((ref) => print(ref)
 
 io.on('connection', (socket) => {
+    console.log('New client connected');
+    
     socket.on('join', (documentId) => {
         socket.join(documentId);
-        console.log("joined");
+        console.log(`Client joined room: ${documentId}`);
     });
 
-    socket.on('typing...', (data) => {
+    socket.on('changes', (data) => {
+        console.log(`Received changes for room: ${data.room}`);
         socket.broadcast.to(data.room).emit('changes', data);
-    })
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
 });
 
 
