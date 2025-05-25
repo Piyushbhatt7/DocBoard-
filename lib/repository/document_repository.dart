@@ -77,16 +77,49 @@ class DocumentRepository {
     return error;
   }
 
-  void updateTitle({
+  Future<ErrorModel> updateTitle({
     required String token,
     required String id,
     required String title,
   }) async {
-    var res = await http.post(
-      Uri.parse('$host/doc/title'),
-      headers: {'Content-Type': 'application/json', 'x-auth-token': token},
-      body: jsonEncode({'title': title, 'id': id}),
+    ErrorModel error = ErrorModel(
+      error: 'Some unexpected error occurred',
+      data: null,
     );
+
+    try {
+      var res = await http.post(
+        Uri.parse('$host/api/doc/title'),
+        headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+        body: jsonEncode({'title': title, 'id': id}),
+      );
+
+      print('Update Title Status Code: ${res.statusCode}');
+      print('Update Title Response Body: ${res.body}');
+
+      switch (res.statusCode) {
+        case 200:
+          error = ErrorModel(
+            error: null,
+            data: DocumentModel.fromJson(jsonDecode(res.body))
+          );
+          break;
+        case 404:
+          error = ErrorModel(
+            error: 'Document not found',
+            data: null
+          );
+          break;
+        default:
+          error = ErrorModel(
+            error: 'Failed to update document title',
+            data: null
+          );
+      }
+    } catch (e) {
+      error = ErrorModel(error: e.toString(), data: null);
+    }
+    return error;
   }
 
   Future<ErrorModel> getDocumentById(String token, String id) async {
@@ -97,23 +130,35 @@ class DocumentRepository {
 
     try {
       var res = await _client.get(
-        Uri.parse('$host/api/doc/id'),
+        Uri.parse('$host/api/docs/$id'),
         headers: {'Content-Type': 'application/json', 'x-auth-token': token},
       );
 
-      print('Status Code: ${res.statusCode}');
-      print('Response Body: ${res.body}');
+      print('Get Document Status Code: ${res.statusCode}');
+      print('Get Document Response Body: ${res.body}');
 
       switch (res.statusCode) {
         case 200:
-          error = ErrorModel(error: null, data: DocumentModel.fromJson(res.body as Map<String, dynamic>),);
-            
-
+          final jsonData = jsonDecode(res.body);
+          error = ErrorModel(
+            error: null, 
+            data: DocumentModel.fromJson(jsonData)
+          );
+          break;
+        case 404:
+          error = ErrorModel(
+            error: 'Document not found',
+            data: null
+          );
           break;
         default:
-          throw 'This document does ot exist, please create new document';
+          error = ErrorModel(
+            error: 'Failed to fetch document',
+            data: null
+          );
       }
     } catch (e) {
+      print('Error in getDocumentById: $e');
       error = ErrorModel(error: e.toString(), data: null);
     }
     return error;
