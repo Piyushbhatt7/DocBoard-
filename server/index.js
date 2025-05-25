@@ -6,6 +6,12 @@ const authRouter = require("./routes/auth");
 const documentRouter = require("./routes/document");
 const http = require('http');
 const { Socket } = require("dgram");
+// const io = require("socket.io")(server, {
+//   cors: {
+//     origin: "*", // You can specify mobile IP or leave it as '*'
+//     methods: ["GET", "POST"]
+//   }
+// });
 
 
 const PORT = process.env.PORT || 3001;      
