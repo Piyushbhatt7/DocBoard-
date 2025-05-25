@@ -106,8 +106,8 @@ class DocumentRepository {
 
       switch (res.statusCode) {
         case 200:
-          DocumentModel.fromJson(res.body);
-          error = ErrorModel(error: null, data: documents);
+          error = ErrorModel(error: null, data: DocumentModel.fromJson(res.body as Map<String, dynamic>),);
+            
 
           break;
         default:
