@@ -28,7 +28,7 @@ documentRouter.post('/doc/create', auth, async(req, res) => {
 
 documentRouter.get('/docs:id', auth, async (req, res) => {
     try {
-        let document = await Document.findById({ uid: req.params.id });
+        const document = await Document.findById(req.params.id);
         res.json(document);
     } catch (e) {
         res.status(500).json({ error: e.message });
