@@ -11,4 +11,9 @@ class SocketRepository {
   {
     _socketClient.emit('join', documentId);
   }
+
+  void typing(Map<String, dynamic> data)
+  {
+    
+  }
 }
