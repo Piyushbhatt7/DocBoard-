@@ -77,10 +77,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           // 2-> changes that are made from previous part
           // 3-> local? -> we have typed remote?
 
-          if(event.item3 == quill.ChangeSource.local)
+          if(event.source == quill.ChangeSource.local)
           {
             Map<String, dynamic> map = {
-              'delta': event.item2,
+              'delta': event.change,
               'room': widget.id,
             };
             socketRepository.typing(map);
