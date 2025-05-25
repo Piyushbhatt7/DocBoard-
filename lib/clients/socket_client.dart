@@ -10,11 +10,14 @@ class SocketClient {
 
   SocketClient._internal() {
     socket = io.io(host, <String, dynamic>{
-      'transports': ['websocket'],
+      'transports': ['websocket', 'polling'],
       'autoConnect': true,
       'reconnection': true,
-      'reconnectionAttempts': 5,
+      'reconnectionAttempts': 10,
       'reconnectionDelay': 1000,
+      'reconnectionDelayMax': 5000,
+      'timeout': 20000,
+      'forceNew': true,
     });
     
     socket!.onConnect((_) {
@@ -22,11 +25,21 @@ class SocketClient {
     });
 
     socket!.onDisconnect((_) {
-      print('Socket disconnected');
+      print('Socket disconnected, attempting to reconnect...');
+      socket!.connect();
     });
 
     socket!.onError((error) {
       print('Socket error: $error');
+      socket!.connect();
+    });
+
+    socket!.onReconnect((_) {
+      print('Socket reconnected successfully');
+    });
+
+    socket!.onReconnectAttempt((attemptNumber) {
+      print('Attempting to reconnect: $attemptNumber');
     });
 
     socket!.connect();
