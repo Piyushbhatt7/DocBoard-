@@ -9,15 +9,25 @@ class SocketRepository {
 
   void joinRoom(String documentId)
   {
+    print('Joining room: $documentId');
     _socketClient.emit('join', documentId);
   }
 
   void typing(Map<String, dynamic> data)
   {
-    _socketClient.emit('typing...', data);
+    print('Sending changes to room: ${data['room']}');
+    _socketClient.emit('changes', data);
   }
 
   void changeListener(Function(Map<String, dynamic> ) func) {
-    _socketClient.on('changes', (data)=> func(data));
+    print('Setting up change listener');
+    _socketClient.on('changes', (data)=> {
+      print('Received changes event: $data'),
+      func(data),
+    });
+  }
+
+  bool isConnected() {
+    return _socketClient.connected;
   }
 }
