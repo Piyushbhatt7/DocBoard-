@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();    
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
+var io = require("socket.io")(server);
 
 // Configure CORS for web development
 app.use(cors({
