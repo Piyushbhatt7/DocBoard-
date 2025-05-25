@@ -14,6 +14,6 @@ class SocketRepository {
 
   void typing(Map<String, dynamic> data)
   {
-    
+    _socketClient.emit('typing...', data);
   }
 }
