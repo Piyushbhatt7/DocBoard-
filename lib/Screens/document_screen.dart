@@ -9,6 +9,7 @@ import 'package:google_docs/models/error_model.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 import 'package:google_docs/repository/document_repository.dart';
 import 'package:google_docs/repository/socket_repository.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 
 
@@ -32,14 +33,18 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   @override
   void initState() {
     print('Initializing document screen for ID: ${widget.id}');
+    setupSocketConnection();
+    fetchDocumentData();
+    super.initState();
+  }
+
+  void setupSocketConnection() {
     if (!socketRepository.isConnected()) {
       print('Socket not connected, attempting to reconnect...');
       socketRepository.socketClient.connect();
     }
     
     socketRepository.joinRoom(widget.id);
-    fetchDocumentData();
-    super.initState();
 
     socketRepository.changeListener((data) {
       print('Received remote changes: $data');
@@ -60,6 +65,16 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       } else {
         print('Controller is null, cannot apply changes');
       }
+    });
+
+    // Listen for connection state changes
+    socketRepository.socketClient.onConnect((_) {
+      print('Socket connected in document screen');
+      socketRepository.joinRoom(widget.id);
+    });
+
+    socketRepository.socketClient.onDisconnect((_) {
+      print('Socket disconnected in document screen');
     });
   }
 
@@ -124,6 +139,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   @override
   void dispose() {
+    socketRepository.socketClient.off('connect');
+    socketRepository.socketClient.off('disconnect');
     titleController.dispose();
     super.dispose();
   }
