@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const documentSchema = mongoose.Schema({
     uid: {
         required: true,
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     createdAt: {
         required: true,
@@ -16,7 +17,6 @@ const documentSchema = mongoose.Schema({
     content: {
         type: Array,
         default: [],
-
     }
 });
 
