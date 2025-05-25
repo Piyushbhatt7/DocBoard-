@@ -89,7 +89,7 @@ class DocumentRepository {
     );
   }
 
-  Future<ErrorModel> getDocument(String token) async {
+  Future<ErrorModel> getDocumentById(String token) async {
     ErrorModel error = ErrorModel(
       error: 'Some unexpected error occurred',
       data: null,
