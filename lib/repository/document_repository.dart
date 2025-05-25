@@ -111,7 +111,7 @@ class DocumentRepository {
 
           break;
         default:
-          error = ErrorModel(error: res.body, data: null);
+          throw 'This document does ot exist, please create new document'
       }
     } catch (e) {
       error = ErrorModel(error: e.toString(), data: null);
