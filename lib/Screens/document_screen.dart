@@ -55,6 +55,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           print('Successfully applied remote changes');
         } catch (e) {
           print('Error applying remote changes: $e');
+          print('Error details: ${e.toString()}');
         }
       } else {
         print('Controller is null, cannot apply changes');
@@ -103,6 +104,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               print('Changes sent successfully');
             } catch (e) {
               print('Error sending changes: $e');
+              print('Error details: ${e.toString()}');
             }
           }
         });
