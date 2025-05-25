@@ -19,6 +19,13 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
   quill.QuillController _controller = quill.QuillController.basic();
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   void dispose() {
     titleController.dispose();
