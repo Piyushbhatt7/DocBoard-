@@ -76,6 +76,13 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           // 1-> entire content of document
           // 2-> changes that are made from previous part
           // 3-> local? -> we have typed remote?
+
+          if(event.item3 == quill.ChangeSource.local)
+          {
+            Map<String dynamic> map = {
+              
+            }
+          }
         });
       }
     } 
