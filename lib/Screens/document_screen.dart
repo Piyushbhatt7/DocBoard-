@@ -31,21 +31,33 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   @override
   void initState() {
+    print('Initializing document screen for ID: ${widget.id}');
+    if (!socketRepository.isConnected()) {
+      print('Socket not connected, attempting to reconnect...');
+      socketRepository.socketClient.connect();
+    }
+    
     socketRepository.joinRoom(widget.id);
     fetchDocumentData();
     super.initState();
 
     socketRepository.changeListener((data) {
+      print('Received remote changes: $data');
       if (_controller != null) {
         try {
+          final delta = Delta.fromJson(data['delta']);
+          print('Applying delta: $delta');
           _controller!.compose(
-            Delta.fromJson(data['delta']),
+            delta,
             _controller!.selection,
             quill.ChangeSource.remote,
           );
+          print('Successfully applied remote changes');
         } catch (e) {
           print('Error applying remote changes: $e');
         }
+      } else {
+        print('Controller is null, cannot apply changes');
       }
     });
   }
@@ -78,13 +90,17 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         }
 
         _controller!.document.changes.listen((event) {
+          print('Document changed. Source: ${event.source}');
           if (event.source == quill.ChangeSource.local) {
             try {
+              final deltaJson = event.change.toJson();
+              print('Sending changes: $deltaJson');
               Map<String, dynamic> map = {
-                'delta': event.change.toJson(),
+                'delta': deltaJson,
                 'room': widget.id,
               };
               socketRepository.typing(map);
+              print('Changes sent successfully');
             } catch (e) {
               print('Error sending changes: $e');
             }
