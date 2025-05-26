@@ -77,7 +77,13 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1), 
-          child: child
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                
+              )
+            ),
+          )
           ),
       ),
     );
