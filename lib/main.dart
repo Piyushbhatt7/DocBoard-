@@ -52,13 +52,11 @@ class _MyAppState extends ConsumerState<MyApp> {
           return loggedOutRoute;
        }),
       routeInformationParser: const RoutemasterParser(),
-
-        localizationsDelegates: const [
-    GlobalMaterialLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    quill.FlutterQuillLocalizations.delegate, // Required by flutter_quill
-  ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 }
