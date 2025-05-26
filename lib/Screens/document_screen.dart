@@ -1,16 +1,15 @@
 import 'dart:async';
-
-import 'package:docs_clone_flutter/colors.dart';
-import 'package:docs_clone_flutter/common/widgets/loader.dart';
-import 'package:docs_clone_flutter/models/document_model.dart';
-import 'package:docs_clone_flutter/models/error_model.dart';
-import 'package:docs_clone_flutter/repository/auth_repository.dart';
-import 'package:docs_clone_flutter/repository/document_repository.dart';
-import 'package:docs_clone_flutter/repository/socket_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_docs/colors.dart';
+import 'package:google_docs/common/widgets/loader.dart';
+import 'package:google_docs/models/document_model.dart';
+import 'package:google_docs/models/error_model.dart';
+import 'package:google_docs/repository/auth_repository.dart';
+import 'package:google_docs/repository/document_repository.dart';
+import 'package:google_docs/repository/socket_repository.dart';
 import 'package:routemaster/routemaster.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
@@ -37,18 +36,22 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     fetchDocumentData();
 
     socketRepository.changeListener((data) {
-      _controller?.compose(
-        quill.Delta.fromJson(data['delta']),
-        _controller?.selection ?? const TextSelection.collapsed(offset: 0),
-        quill.ChangeSource.REMOTE,
-      );
+      if (_controller != null) {
+        _controller!.compose(
+          quill.Delta.fromJson(data['delta']),
+          _controller!.selection,
+          quill.ChangeSource.remote,
+        );
+      }
     });
 
     Timer.periodic(const Duration(seconds: 2), (timer) {
-      socketRepository.autoSave(<String, dynamic>{
-        'delta': _controller!.document.toDelta(),
-        'room': widget.id,
-      });
+      if (_controller != null) {
+        socketRepository.autoSave(<String, dynamic>{
+          'delta': _controller!.document.toDelta().toJson(),
+          'room': widget.id,
+        });
+      }
     });
   }
 
@@ -60,32 +63,39 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
     if (errorModel!.data != null) {
       titleController.text = (errorModel!.data as DocumentModel).title;
+      
+      // Initialize QuillController with proper Delta handling
+      final document = errorModel!.data.content.isEmpty
+          ? quill.Document()
+          : quill.Document.fromDelta(
+              quill.Delta.fromJson(errorModel!.data.content),
+            );
+      
       _controller = quill.QuillController(
-        document: errorModel!.data.content.isEmpty
-            ? quill.Document()
-            : quill.Document.fromDelta(
-                quill.Delta.fromJson(errorModel!.data.content),
-              ),
+        document: document,
         selection: const TextSelection.collapsed(offset: 0),
       );
+
+      // Set up document change listener
+      _controller!.document.changes.listen((event) {
+        if (event.item3 == quill.ChangeSource.local) {
+          Map<String, dynamic> map = {
+            'delta': event.item2.toJson(),
+            'room': widget.id,
+          };
+          socketRepository.typing(map);
+        }
+      });
+
       setState(() {});
     }
-
-    _controller!.document.changes.listen((event) {
-      if (event.item3 == quill.ChangeSource.LOCAL) {
-        Map<String, dynamic> map = {
-          'delta': event.item2,
-          'room': widget.id,
-        };
-        socketRepository.typing(map);
-      }
-    });
   }
 
   @override
   void dispose() {
     super.dispose();
     titleController.dispose();
+    _controller?.dispose();
   }
 
   void updateTitle(WidgetRef ref, String title) {
@@ -128,7 +138,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               ),
               label: const Text('Share'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: kBlueColor,
+                backgroundColor: KblueColor,
               ),
             ),
           ),
@@ -155,7 +165,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                     border: InputBorder.none,
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: kBlueColor,
+                        color: KblueColor,
                       ),
                     ),
                     contentPadding: EdgeInsets.only(left: 10),
@@ -171,7 +181,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: kGreyColor,
+                color: KgreyColor,
                 width: 0.1,
               ),
             ),
