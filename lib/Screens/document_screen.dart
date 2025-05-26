@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:google_docs/colors.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
@@ -16,6 +18,7 @@ class DocumentScreen extends ConsumerStatefulWidget {
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
+  final quill.QuillController _controller = quill.QuillController.basic();
 
 
  @override
@@ -49,42 +52,62 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           )
         ],
 
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/images/brand_image.png',
-              height: 60,
-              //fit: BoxFit.cover,
-            ),
-
-            const SizedBox(width: 10.0,),
-            SizedBox(
-              width: 180,
-              child: TextField(
-                controller: titleController,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: KblueColor,
-                    )
-                  ),
-                  contentPadding: EdgeInsets.only(left: 10.0),
-                ),
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/images/brand_image.png',
+                height: 60,
+                //fit: BoxFit.cover,
               ),
-            )
-          ],
+          
+              const SizedBox(width: 10.0,),
+              SizedBox(
+                width: 180,
+                child: TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: KblueColor,
+                      )
+                    ),
+                    contentPadding: EdgeInsets.only(left: 10.0),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1), 
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                
+                color: KgreyColor,
+                width: 0.1,
               )
             ),
           )
           ),
+      ),
+
+      body: Column(
+        children: [
+          quill.QuillSimpleToolbar(
+          controller: _controller
+          ),
+          Expanded(
+            child: Container(
+              child: quill.QuillEditor.basic(
+                controller: _controller,
+                
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
