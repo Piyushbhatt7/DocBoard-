@@ -26,29 +26,41 @@ class DocumentScreen extends ConsumerStatefulWidget {
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
   quill.QuillController? _controller;
+  final FocusNode _focusNode = FocusNode();
   ErrorModel? errorModel;
   SocketRepository socketRepository = SocketRepository();
+  Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
+    print('Initializing DocumentScreen for ID: ${widget.id}');
     socketRepository.joinRoom(widget.id);
     fetchDocumentData();
 
     socketRepository.changeListener((data) {
+      print('Received socket change: $data');
       if (_controller != null) {
-        _controller!.compose(
-          quill.Delta.fromJson(data['delta']),
-          _controller!.selection,
-          quill.ChangeSource.remote,
-        );
+        try {
+          final String content = data['content'] as String;
+          if (content != _controller!.document.toPlainText()) {
+            _controller!.document = quill.Document()..insert(0, content);
+          }
+        } catch (e) {
+          print('Error handling content: $e');
+          print('Problematic data: ${data['content']}');
+        }
+      } else {
+        print('Controller is null when receiving socket change');
       }
     });
 
     Timer.periodic(const Duration(seconds: 2), (timer) {
       if (_controller != null) {
+        final String content = _controller!.document.toPlainText();
+        print('Auto-saving document with content: $content');
         socketRepository.autoSave(<String, dynamic>{
-          'delta': _controller!.document.toDelta().toJson(),
+          'content': content,
           'room': widget.id,
         });
       }
@@ -56,38 +68,48 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   }
 
   void fetchDocumentData() async {
+    print('Fetching document data for ID: ${widget.id}');
     errorModel = await ref.read(documentRepositoryProvider).getDocumentById(
           ref.read(userProvider)!.token,
           widget.id,
         );
 
     if (errorModel!.data != null) {
+      print('Document data received: ${errorModel!.data.content}');
       titleController.text = (errorModel!.data as DocumentModel).title;
       
-      // Initialize QuillController with proper Delta handling
-      final document = errorModel!.data.content.isEmpty
-          ? quill.Document()
-          : quill.Document.fromDelta(
-              quill.Delta.fromJson(errorModel!.data.content),
-            );
+      // Initialize QuillController with content
+      final String content = errorModel!.data.content.isEmpty 
+          ? '' 
+          : errorModel!.data.content;
+      
+      print('Initializing QuillController with content: $content');
       
       _controller = quill.QuillController(
-        document: document,
+        document: quill.Document()..insert(0, content),
         selection: const TextSelection.collapsed(offset: 0),
       );
 
       // Set up document change listener
       _controller!.document.changes.listen((event) {
-        if (event.item3 == quill.ChangeSource.local) {
-          Map<String, dynamic> map = {
-            'delta': event.item2.toJson(),
-            'room': widget.id,
-          };
-          socketRepository.typing(map);
+        if (event.source == quill.ChangeSource.local) {
+          // Debounce the changes to avoid too many updates
+          _debounceTimer?.cancel();
+          _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+            final String content = _controller!.document.toPlainText();
+            print('Sending content update: $content');
+            Map<String, dynamic> map = {
+              'content': content,
+              'room': widget.id,
+            };
+            socketRepository.typing(map);
+          });
         }
       });
 
       setState(() {});
+    } else {
+      print('Error fetching document: ${errorModel!.error}');
     }
   }
 
@@ -96,6 +118,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     super.dispose();
     titleController.dispose();
     _controller?.dispose();
+    _focusNode.dispose();
+    _debounceTimer?.cancel();
   }
 
   void updateTitle(WidgetRef ref, String title) {
@@ -188,11 +212,15 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           ),
         ),
       ),
-      body: Center(
+         body: Center(
         child: Column(
           children: [
             const SizedBox(height: 10),
-            quill.QuillToolbar.basic(controller: _controller!),
+            quill.QuillToolbar.basic(
+              controller: _controller!,
+              showAlignmentButtons: true,
+              multiRowsDisplay: false,
+            ),
             const SizedBox(height: 10),
             Expanded(
               child: SizedBox(
@@ -204,7 +232,6 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                     padding: const EdgeInsets.all(30.0),
                     child: quill.QuillEditor.basic(
                       controller: _controller!,
-                      readOnly: false,
                     ),
                   ),
                 ),
