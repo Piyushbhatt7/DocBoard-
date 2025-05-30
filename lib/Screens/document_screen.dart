@@ -25,6 +25,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
  void dispose() {
    titleController.dispose();
    super.dispose();
+   _controller.dispose();
  }
 
 
