@@ -7,11 +7,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  runApp(
-    const ProviderScope(
-      child: MyApp()
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -26,12 +22,12 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     // Check for existing user data when app starts
-    Future.microtask(() => 
-      ref.read(authRepositoryProvider).getUserData().then((errorModel) {
+    Future.microtask(
+      () => ref.read(authRepositoryProvider).getUserData().then((errorModel) {
         if (errorModel.error == null && errorModel.data != null) {
           ref.read(userProvider.notifier).update((state) => errorModel.data);
         }
-      })
+      }),
     );
   }
 
@@ -44,21 +40,22 @@ class _MyAppState extends ConsumerState<MyApp> {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),
-      routerDelegate: RoutemasterDelegate(routesBuilder: (BuildContext context) { 
+      routerDelegate: RoutemasterDelegate(
+        routesBuilder: (BuildContext context) {
           final user = ref.watch(userProvider);
-          if(user!=null && user.token.isNotEmpty) {
+          if (user != null && user.token.isNotEmpty) {
             return loggedInRoute;
           }
           return loggedOutRoute;
-       }),
+        },
+      ),
       routeInformationParser: const RoutemasterParser(),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        quill.FlutterQuillLocalizations.delegate,
       ],
     );
   }
 }
-
-
