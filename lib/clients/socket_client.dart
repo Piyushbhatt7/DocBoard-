@@ -13,9 +13,10 @@ class SocketClient {
     socket = io.io(
       host,
       io.OptionBuilder()
-        .setTransports(['websocket']) // for Flutter compatibility
-        .disableAutoConnect() // connect manually
+        .setTransports(['websocket', 'polling'])
+        .disableAutoConnect()
         .setExtraHeaders({'Access-Control-Allow-Origin': '*'})
+        .setQuery({'token': 'dummy'}) // Add a dummy token to prevent CORS issues
         .build()
     );
     
