@@ -271,7 +271,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           children: [
             const SizedBox(height: 10.0),
             quill.QuillSimpleToolbar(
-              controller: _controller
+              controller: _controller!
             ),
             Expanded(
               child: Container(
