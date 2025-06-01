@@ -144,7 +144,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               print('Document content loaded successfully');
             } catch (e) {
               print('Error loading document content: $e');
-              _controller.document = quill.Document();
+              _controller!.document = quill.Document();
             }
           } else {
             print('No content found, initializing empty document');
