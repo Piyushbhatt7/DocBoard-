@@ -35,15 +35,20 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   }
 
   void _setupSocketListeners() {
+    print('Setting up socket listeners for document: ${widget.id}');
+    
     _socketRepository.changeListener((data) {
+      print('Received socket change: $data');
       if (data['type'] == 'content') {
         final content = data['content'];
         if (content != null) {
           try {
+            print('Parsing document content: $content');
             final doc = quill.Document.fromJson(content);
             if (mounted) {
               setState(() {
                 _controller.document = doc;
+                print('Document updated with new content');
               });
             }
           } catch (e) {
@@ -57,6 +62,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       if (!mounted) return;
       
       final content = _controller.document.toDelta().toJson();
+      print('Sending document update: $content');
       _socketRepository.autoSave({
         'type': 'content',
         'content': content,
@@ -66,31 +72,38 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   }
 
   Future<void> _loadDocument() async {
+    print('Loading document: ${widget.id}');
     final token = ref.read(userProvider)?.token;
-    if (token == null) return;
+    if (token == null) {
+      print('No token available');
+      return;
+    }
 
     final errorModel = await ref.read(documentRepositoryProvider).getDocumentById(token, widget.id);
     
     if (errorModel.error == null && errorModel.data != null) {
+      print('Document loaded successfully: ${errorModel.data.title}');
       if (mounted) {
         setState(() {
           titleController.text = errorModel.data.title;
           if (errorModel.data.content.isNotEmpty) {
             try {
+              print('Loading document content: ${errorModel.data.content}');
               final doc = quill.Document.fromJson(errorModel.data.content);
               _controller.document = doc;
+              print('Document content loaded successfully');
             } catch (e) {
               print('Error loading document content: $e');
-              // Initialize with empty document if content is invalid
               _controller.document = quill.Document();
             }
           } else {
-            // Initialize with empty document if no content
+            print('No content found, initializing empty document');
             _controller.document = quill.Document();
           }
         });
       }
     } else {
+      print('Error loading document: ${errorModel.error}');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorModel.error ?? 'Failed to load document')),
