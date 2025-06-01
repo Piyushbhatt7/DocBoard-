@@ -5,7 +5,7 @@ const cors = require('cors');
 const authRouter = require("./routes/auth");
 const documentRouter = require("./routes/document");
 const http = require('http');
-const { Server: SocketServer } = require("socket.io");
+const socketIO = require("socket.io");
 const Document = require('./models/document_model');
 
 const PORT = process.env.PORT || 3001;      
@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();    
 
 var server = http.createServer(app);
-var io = new SocketServer(server, {
+var io = socketIO(server, {
   cors: {
     origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:3000','http://localhost:3001', 'http://127.0.0.1:3000'],
     methods: ["GET", "POST"],
