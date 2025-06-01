@@ -35,6 +35,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     titleController.addListener(_onTitleChanged);
     _loadDocument();
     _setupSocketListeners();
+
+    socketRepo
   }
 
   void _setupSocketListeners() {
