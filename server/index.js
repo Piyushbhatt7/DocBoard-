@@ -18,7 +18,8 @@ var io = socketIO(server, {
     origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:3000','http://localhost:3001', 'http://127.0.0.1:3000'],
     methods: ["GET", "POST"],
     credentials: true
-  }
+  },
+  transports: ['websocket', 'polling']
 });
 
 // Configure CORS for web development
