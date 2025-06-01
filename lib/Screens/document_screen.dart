@@ -76,7 +76,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         
         // Save to server
         _saveDocument(content);      
-             
+              
         // Save to socket for real-time updates
         socketRepository.autoSave({
           'type': 'content',
