@@ -140,7 +140,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             try {
               print('Loading document content: ${errorModel.data.content}');
               final doc = quill.Document.fromJson(errorModel.data.content);
-              _controller.document = doc;
+              _controller!.document = doc;
               print('Document content loaded successfully');
             } catch (e) {
               print('Error loading document content: $e');
