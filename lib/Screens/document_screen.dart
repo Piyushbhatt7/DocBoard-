@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 import 'package:google_docs/repository/document_repository.dart';
 import 'package:google_docs/repository/auth_repository.dart';
-import 'package:google_docs/models/document_model.dart';
 import 'package:google_docs/repository/socket_repository.dart';
-import 'dart:convert';
 import 'dart:async';
 
 class DocumentScreen extends ConsumerStatefulWidget {
@@ -37,7 +35,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     _setupSocketListeners();
 
     socketRepository.changeListener((data) {
-      
+
     });
   }
 
