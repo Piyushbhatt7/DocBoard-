@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:google_docs/constants.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketClient {
 
@@ -11,11 +10,12 @@ class SocketClient {
 
     SocketClient._internal() {
     print('Initializing socket connection to: $host');
-    socket = IO.io(
+    socket = io.io(
       host,
-      IO.OptionBuilder()
+      io.OptionBuilder()
         .setTransports(['websocket']) // for Flutter compatibility
         .disableAutoConnect() // connect manually
+        .setExtraHeaders({'Access-Control-Allow-Origin': '*'})
         .build()
     );
     
