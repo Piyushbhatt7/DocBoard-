@@ -41,7 +41,11 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         if (content != null) {
           try {
             final doc = quill.Document.fromJson(content);
-            _controller.document = doc;
+            if (mounted) {
+              setState(() {
+                _controller.document = doc;
+              });
+            }
           } catch (e) {
             print('Error parsing document content: $e');
           }
@@ -50,9 +54,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     });
 
     _controller.document.changes.listen((event) {
+      if (!mounted) return;
+      
+      final content = _controller.document.toDelta().toJson();
       _socketRepository.autoSave({
         'type': 'content',
-        'content': _controller.document.toDelta().toJson(),
+        'content': content,
         'documentId': widget.id,
       });
     });
@@ -74,7 +81,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               _controller.document = doc;
             } catch (e) {
               print('Error loading document content: $e');
+              // Initialize with empty document if content is invalid
+              _controller.document = quill.Document();
             }
+          } else {
+            // Initialize with empty document if no content
+            _controller.document = quill.Document();
           }
         });
       }
