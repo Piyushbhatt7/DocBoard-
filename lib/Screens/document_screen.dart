@@ -20,7 +20,7 @@ class DocumentScreen extends ConsumerStatefulWidget {
 
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
-  late quill.QuillController _controller;
+  late quill.QuillController? _controller;
   bool _isSaving = false;
   final SocketRepository socketRepository = SocketRepository();
   Timer? _debounceTimer;
@@ -52,7 +52,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             final doc = quill.Document.fromJson(content);
             if (mounted) {
               setState(() {
-                _controller.document = doc;
+                _controller!.document = doc;
                 print('Document updated with new content');
               });
             }
@@ -63,7 +63,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       }
     });
 
-    _controller.document.changes.listen((event) {
+    _controller!.document.changes.listen((event) {
       if (!mounted) return;
       
       // Cancel any existing timer
@@ -71,7 +71,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       
       // Set a new timer
       _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-        final content = _controller.document.toDelta().toJson();
+        final content = _controller!.document.toDelta().toJson();
         print('Auto-saving document content: $content');
         
         // Save to server
