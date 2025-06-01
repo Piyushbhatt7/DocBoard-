@@ -74,7 +74,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         final content = _controller!.document.toDelta().toJson();
         print('Auto-saving document content: $content');
         
-        // Save to server
+        // Save to server 
         _saveDocument(content);         
               
         // Save to socket for real-time updates
