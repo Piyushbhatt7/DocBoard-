@@ -6,6 +6,8 @@ import 'package:google_docs/repository/document_repository.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 import 'package:google_docs/models/document_model.dart';
 import 'package:google_docs/repository/socket_repository.dart';
+import 'dart:convert';
+import 'dart:async';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -23,6 +25,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   late quill.QuillController _controller;
   bool _isSaving = false;
   final SocketRepository _socketRepository = SocketRepository();
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -61,14 +64,59 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     _controller.document.changes.listen((event) {
       if (!mounted) return;
       
-      final content = _controller.document.toDelta().toJson();
-      print('Sending document update: $content');
-      _socketRepository.autoSave({
-        'type': 'content',
-        'content': content,
-        'documentId': widget.id,
+      // Cancel any existing timer
+      _debounceTimer?.cancel();
+      
+      // Set a new timer
+      _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+        final content = _controller.document.toDelta().toJson();
+        print('Auto-saving document content: $content');
+        
+        // Save to server
+        _saveDocument(content);
+        
+        // Save to socket for real-time updates
+        _socketRepository.autoSave({
+          'type': 'content',
+          'content': content,
+          'documentId': widget.id,
+        });
       });
     });
+  }
+
+  Future<void> _saveDocument(List<dynamic> content) async {
+    final token = ref.read(userProvider)?.token;
+    if (token == null) {
+      print('No token available for saving document');
+      return;
+    }
+
+    try {
+      final errorModel = await ref.read(documentRepositoryProvider).updateDocument(
+        token: token,
+        id: widget.id,
+        content: content,
+      );
+
+      if (errorModel.error != null) {
+        print('Error saving document: ${errorModel.error}');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error saving document: ${errorModel.error}')),
+          );
+        }
+      } else {
+        print('Document saved successfully');
+      }
+    } catch (e) {
+      print('Exception while saving document: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving document: $e')),
+        );
+      }
+    }
   }
 
   Future<void> _loadDocument() async {
@@ -146,6 +194,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     titleController.removeListener(_onTitleChanged);
     titleController.dispose();
     super.dispose();
@@ -161,21 +210,21 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton.icon(onPressed: (){}, 
-            icon: Icon(Icons.lock, size: 16, color: kWhiteColor,),
-            label: const Text('Share', style: TextStyle(
-              color: kWhiteColor
-            ),),
-            style: ElevatedButton.styleFrom(
-            backgroundColor: KblueColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            ),
-          )
+            child: ElevatedButton.icon(
+              onPressed: (){}, 
+              icon: Icon(Icons.lock, size: 16, color: kWhiteColor,),
+              label: const Text('Share', style: TextStyle(
+                color: kWhiteColor
+              ),),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: KblueColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            )
           )
         ],
-
         title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Row(
@@ -183,9 +232,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               Image.asset(
                 'assets/images/brand_image.png',
                 height: 60,
-                //fit: BoxFit.cover,
               ),
-          
               const SizedBox(width: 10.0,),
               SizedBox(
                 width: 180,
@@ -215,17 +262,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               )
             ),
           )
-          ),
+        ),
       ),
-
       body: Center(
         child: Column(
           children: [
-            const SizedBox(
-              height: 10.0,
-            ),
+            const SizedBox(height: 10.0),
             quill.QuillSimpleToolbar(
-            controller: _controller
+              controller: _controller
             ),
             Expanded(
               child: Container(
@@ -238,7 +282,6 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                       padding: const EdgeInsets.all(30.0),
                       child: quill.QuillEditor.basic(
                         controller: _controller,
-                        
                       ),
                     ),
                   ),
