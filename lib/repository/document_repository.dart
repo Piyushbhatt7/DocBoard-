@@ -59,22 +59,45 @@ class DocumentRepository {
       print('Get Documents Status Code: ${res.statusCode}');
       print('Get Documents Response Body: ${res.body}');
 
-      switch (res.statusCode) {
-        case 200:
-          List<DocumentModel> documents = [];
-          final jsonData = jsonDecode(res.body);
-          if (jsonData is List) {
-            for (var doc in jsonData) {
-              documents.add(DocumentModel.fromJson(doc));
-            }
-          }
-          error = ErrorModel(error: null, data: documents);
-          break;
-        default:
-          error = ErrorModel(error: res.body, data: null);
+      if (res.statusCode == 200) {
+        List<dynamic> documents = jsonDecode(res.body);
+        List<DocumentModel> docs = documents
+            .map((doc) => DocumentModel.fromJson(doc))
+            .toList();
+        error = ErrorModel(error: null, data: docs);
+      } else {
+        error = ErrorModel(error: jsonDecode(res.body)['error'], data: null);
       }
     } catch (e) {
-      print('Error in getDocument: $e');
+      error = ErrorModel(error: e.toString(), data: null);
+    }
+    return error;
+  }
+
+  Future<ErrorModel> getDocumentById(String token, String id) async {
+    ErrorModel error = ErrorModel(
+      error: 'Some unexpected error occurred',
+      data: null,
+    );
+
+    try {
+      var res = await _client.get(
+        Uri.parse('$host/api/doc/$id'),
+        headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+      );
+
+      print('Get Document Status Code: ${res.statusCode}');
+      print('Get Document Response Body: ${res.body}');
+
+      if (res.statusCode == 200) {
+        error = ErrorModel(
+          error: null,
+          data: DocumentModel.fromJson(jsonDecode(res.body)),
+        );
+      } else {
+        error = ErrorModel(error: jsonDecode(res.body)['error'], data: null);
+      }
+    } catch (e) {
       error = ErrorModel(error: e.toString(), data: null);
     }
     return error;
@@ -91,33 +114,25 @@ class DocumentRepository {
     );
 
     try {
-      var res = await http.post(
+      var res = await _client.put(
         Uri.parse('$host/api/doc/title'),
         headers: {'Content-Type': 'application/json', 'x-auth-token': token},
-        body: jsonEncode({'title': title, 'id': id}),
+        body: jsonEncode({
+          'title': title,
+          'id': id,
+        }),
       );
 
       print('Update Title Status Code: ${res.statusCode}');
       print('Update Title Response Body: ${res.body}');
 
-      switch (res.statusCode) { 
-        case 200:
-          error = ErrorModel(
-            error: null,
-            data: DocumentModel.fromJson(jsonDecode(res.body))
-          );
-          break;
-        case 404:
-          error = ErrorModel(
-            error: 'Document not found',
-            data: null
-          );
-          break;
-        default:
-          error = ErrorModel(
-            error: 'Failed to update document title',
-            data: null
-          );
+      if (res.statusCode == 200) {
+        error = ErrorModel(
+          error: null,
+          data: DocumentModel.fromJson(jsonDecode(res.body)),
+        );
+      } else {
+        error = ErrorModel(error: jsonDecode(res.body)['error'], data: null);
       }
     } catch (e) {
       error = ErrorModel(error: e.toString(), data: null);
@@ -125,46 +140,40 @@ class DocumentRepository {
     return error;
   }
 
-  Future<ErrorModel> getDocumentById(String token, String id) async {
+  Future<ErrorModel> updateDocument({
+    required String token,
+    required String id,
+    required List<dynamic> content,
+  }) async {
     ErrorModel error = ErrorModel(
       error: 'Some unexpected error occurred',
       data: null,
     );
 
     try {
-      var res = await _client.get(
-        Uri.parse('$host/api/docs/$id'),
+      var res = await _client.put(
+        Uri.parse('$host/api/doc/content'),
         headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+        body: jsonEncode({
+          'content': content,
+          'id': id,
+        }),
       );
 
-      print('Get Document Status Code: ${res.statusCode}');
-      print('Get Document Response Body: ${res.body}');
+      print('Update Document Status Code: ${res.statusCode}');
+      print('Update Document Response Body: ${res.body}');
 
-      switch (res.statusCode) {
-        case 200:
-          final jsonData = jsonDecode(res.body);
-          error = ErrorModel(
-            error: null, 
-            data: DocumentModel.fromJson(jsonData)
-          );
-          break;
-        case 404:
-          error = ErrorModel(
-            error: 'Document not found',
-            data: null
-          );
-          break;
-        default:
-          error = ErrorModel(
-            error: 'Failed to fetch document',
-            data: null
-          );
+      if (res.statusCode == 200) {
+        error = ErrorModel(
+          error: null,
+          data: DocumentModel.fromJson(jsonDecode(res.body)),
+        );
+      } else {
+        error = ErrorModel(error: jsonDecode(res.body)['error'], data: null);
       }
     } catch (e) {
-      print('Error in getDocumentById: $e');
       error = ErrorModel(error: e.toString(), data: null);
     }
     return error;
   }
-
 }
