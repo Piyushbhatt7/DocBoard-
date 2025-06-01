@@ -148,7 +148,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             }
           } else {
             print('No content found, initializing empty document');
-            _controller.document = quill.Document();
+            _controller!.document = quill.Document();
           }
         });
       }
