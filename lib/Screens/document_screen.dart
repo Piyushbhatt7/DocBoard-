@@ -75,7 +75,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         print('Auto-saving document content: $content');
         
         // Save to server
-        _saveDocument(content);       
+        _saveDocument(content);        
               
         // Save to socket for real-time updates
         socketRepository.autoSave({
