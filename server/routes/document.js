@@ -38,7 +38,7 @@ documentRouter.get('/docs/me', auth, async (req, res) => {
     }
 });
 
-documentRouter.post('/doc/title', auth, async(req, res) => {
+documentRouter.put('/doc/title', auth, async(req, res) => {
     try {
         console.log('Request Body:', req.body);
         console.log('Authenticated User:', req.user);
@@ -61,7 +61,7 @@ documentRouter.post('/doc/title', auth, async(req, res) => {
     }
 });
 
-documentRouter.get('/docs/:id', auth, async (req, res) => {
+documentRouter.get('/doc/:id', auth, async (req, res) => {
     try {
         const document = await Document.findById(req.params.id);
         if (!document) {
@@ -73,65 +73,26 @@ documentRouter.get('/docs/:id', auth, async (req, res) => {
     }
 });
 
-documentRouter.post('/create', auth, async (req, res) => {
+documentRouter.put('/doc/content', auth, async (req, res) => {
     try {
-        const { title, content, createdAt } = req.body;
-        let document = await Document.create({
-            title,
-            content,
-            createdAt,
-            uid: req.user,
-        });
-        document = await document.populate("uid", "name email");
-        res.json(document);
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-});
-
-documentRouter.get('/me', auth, async (req, res) => {
-    try {
-        let documents = await Document.find({ uid: req.user });
-        res.json(documents);
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-});
-
-documentRouter.get('/:id', auth, async (req, res) => {
-    try {
-        const document = await Document.findOne({ _id: req.params.id });
-        res.json(document);
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-});
-
-documentRouter.put('/title', auth, async (req, res) => {
-    try {
-        const { id, title } = req.body;
-        const document = await Document.findOneAndUpdate(
-            { _id: id, uid: req.user },
-            { title },
-            { new: true }
-        );
-        res.json(document);
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-});
-
-documentRouter.put('/content', auth, async (req, res) => {
-    try {
+        console.log('Content update request:', req.body);
         const { id, content } = req.body;
-        const document = await Document.findOneAndUpdate(
-            { _id: id, uid: req.user },
+        
+        const document = await Document.findByIdAndUpdate(
+            id,
             { content },
             { new: true }
         );
+
+        if (!document) {
+            return res.status(404).json({ error: 'Document not found' });
+        }
+
+        console.log('Document updated successfully:', document);
         res.json(document);
     } catch (e) {
-        res.status(500).json(e.message);
+        console.error('Error updating document content:', e);
+        res.status(500).json({ error: e.message });
     }
 });
 
