@@ -200,7 +200,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     titleController.removeListener(_onTitleChanged);
     titleController.dispose();
     super.dispose();
-    _controller.dispose();
+    _controller!.dispose();
   }
 
   @override
