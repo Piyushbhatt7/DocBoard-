@@ -20,7 +20,7 @@ class DocumentScreen extends ConsumerStatefulWidget {
 
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
-  late quill.QuillController? _controller;
+  quill.QuillController? _controller;
   bool _isSaving = false;
   final SocketRepository socketRepository = SocketRepository();
   Timer? _debounceTimer;
