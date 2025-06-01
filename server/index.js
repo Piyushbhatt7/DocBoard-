@@ -6,6 +6,7 @@ const authRouter = require("./routes/auth");
 const documentRouter = require("./routes/document");
 const http = require('http');
 const { Socket } = require("dgram");
+const Document = require('./models/document_model');
 // const io = require("socket.io")(server, {
 //   cors: {
 //     origin: "*", // You can specify mobile IP or leave it as '*'
@@ -80,9 +81,26 @@ io.on('connection', (socket) => {
         console.log(`Client joined room: ${documentId}`);
     });
 
-    socket.on('changes', (data) => {
-        console.log(`Received changes for room: ${data.room}`);
-        socket.broadcast.to(data.room).emit('changes', data);
+    socket.on('save', async (data) => {
+        try {
+            const { documentId, content } = data;
+            console.log(`Saving document ${documentId}`);
+            
+            // Update document in database
+            await Document.findByIdAndUpdate(
+                documentId,
+                { content: content },
+                { new: true }
+            );
+
+            // Broadcast changes to all clients in the room
+            socket.broadcast.to(documentId).emit('changes', {
+                type: 'content',
+                content: content
+            });
+        } catch (error) {
+            console.error('Error saving document:', error);
+        }
     });
 
     socket.on('disconnect', () => {
