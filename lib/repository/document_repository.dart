@@ -100,7 +100,7 @@ class DocumentRepository {
       print('Update Title Status Code: ${res.statusCode}');
       print('Update Title Response Body: ${res.body}');
 
-      switch (res.statusCode) {
+      switch (res.statusCode) { 
         case 200:
           error = ErrorModel(
             error: null,
