@@ -20,15 +20,42 @@ class DocumentScreen extends ConsumerStatefulWidget {
 
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
-  final quill.QuillController _controller = quill.QuillController.basic();
+  late quill.QuillController _controller;
   bool _isSaving = false;
+  final SocketRepository _socketRepository = SocketRepository();
 
   @override
   void initState() {
     super.initState();
-    SocketRepository().joinRoom(widget.id);
+    _controller = quill.QuillController.basic();
+    _socketRepository.joinRoom(widget.id);
     titleController.addListener(_onTitleChanged);
     _loadDocument();
+    _setupSocketListeners();
+  }
+
+  void _setupSocketListeners() {
+    _socketRepository.changeListener((data) {
+      if (data['type'] == 'content') {
+        final content = data['content'];
+        if (content != null) {
+          try {
+            final doc = quill.Document.fromJson(content);
+            _controller.document = doc;
+          } catch (e) {
+            print('Error parsing document content: $e');
+          }
+        }
+      }
+    });
+
+    _controller.document.changes.listen((event) {
+      _socketRepository.autoSave({
+        'type': 'content',
+        'content': _controller.document.toDelta().toJson(),
+        'documentId': widget.id,
+      });
+    });
   }
 
   Future<void> _loadDocument() async {
@@ -41,6 +68,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       if (mounted) {
         setState(() {
           titleController.text = errorModel.data.title;
+          if (errorModel.data.content.isNotEmpty) {
+            try {
+              final doc = quill.Document.fromJson(errorModel.data.content);
+              _controller.document = doc;
+            } catch (e) {
+              print('Error loading document content: $e');
+            }
+          }
         });
       }
     } else {
