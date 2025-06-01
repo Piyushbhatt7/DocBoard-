@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:google_docs/colors.dart';
+import 'package:google_docs/repository/document_repository.dart';
+import 'package:google_docs/repository/auth_repository.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -16,18 +17,55 @@ class DocumentScreen extends ConsumerStatefulWidget {
 }
 
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
-
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
   final quill.QuillController _controller = quill.QuillController.basic();
+  bool _isSaving = false;
 
+  @override
+  void initState() {
+    super.initState();
+    titleController.addListener(_onTitleChanged);
+  }
 
- @override
- void dispose() {
-   titleController.dispose();
-   super.dispose();
-   _controller.dispose();
- }
+  void _onTitleChanged() {
+    if (_isSaving) return;
+    _isSaving = true;
+    
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      if (!mounted) return;
+      
+      final token = ref.read(userProvider)?.token;
+      if (token == null) return;
 
+      final errorModel = await ref.read(documentRepositoryProvider).updateTitle(
+        token: token,
+        id: widget.id,
+        title: titleController.text,
+      );
+
+      if (errorModel.error != null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorModel.error!)),
+          );
+        }
+      }
+      
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    titleController.removeListener(_onTitleChanged);
+    titleController.dispose();
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
