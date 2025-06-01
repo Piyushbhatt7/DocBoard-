@@ -24,25 +24,25 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   TextEditingController titleController = TextEditingController(text: 'Untitled Document');
   late quill.QuillController _controller;
   bool _isSaving = false;
-  final SocketRepository _socketRepository = SocketRepository();
+  final SocketRepository socketRepository = SocketRepository();
   Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
     _controller = quill.QuillController.basic();
-    _socketRepository.joinRoom(widget.id);
+    socketRepository.joinRoom(widget.id);
     titleController.addListener(_onTitleChanged);
     _loadDocument();
     _setupSocketListeners();
 
-    socketRepos
+    socketRepository.changeListener((data)=> null);
   }
 
   void _setupSocketListeners() {
     print('Setting up socket listeners for document: ${widget.id}');
     
-    _socketRepository.changeListener((data) {
+    socketRepository.changeListener((data) {
       print('Received socket change: $data');
       if (data['type'] == 'content') {
         final content = data['content'];
@@ -78,7 +78,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         _saveDocument(content);
         
         // Save to socket for real-time updates
-        _socketRepository.autoSave({
+        socketRepository.autoSave({
           'type': 'content',
           'content': content,
           'documentId': widget.id,
