@@ -5,6 +5,7 @@ import 'package:google_docs/colors.dart';
 import 'package:google_docs/repository/document_repository.dart';
 import 'package:google_docs/repository/auth_repository.dart';
 import 'package:google_docs/models/document_model.dart';
+import 'package:google_docs/repository/socket_repository.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -25,7 +26,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   @override
   void initState() {
     super.initState();
-    socketRepository.joinRoom(widget.id);
+    SocketRepository().joinRoom(widget.id);
     titleController.addListener(_onTitleChanged);
     _loadDocument();
   }
