@@ -73,4 +73,66 @@ documentRouter.get('/docs/:id', auth, async (req, res) => {
     }
 });
 
+documentRouter.post('/create', auth, async (req, res) => {
+    try {
+        const { title, content, createdAt } = req.body;
+        let document = await Document.create({
+            title,
+            content,
+            createdAt,
+            uid: req.user,
+        });
+        document = await document.populate("uid", "name email");
+        res.json(document);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+});
+
+documentRouter.get('/me', auth, async (req, res) => {
+    try {
+        let documents = await Document.find({ uid: req.user });
+        res.json(documents);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+});
+
+documentRouter.get('/:id', auth, async (req, res) => {
+    try {
+        const document = await Document.findOne({ _id: req.params.id });
+        res.json(document);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+});
+
+documentRouter.put('/title', auth, async (req, res) => {
+    try {
+        const { id, title } = req.body;
+        const document = await Document.findOneAndUpdate(
+            { _id: id, uid: req.user },
+            { title },
+            { new: true }
+        );
+        res.json(document);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+});
+
+documentRouter.put('/content', auth, async (req, res) => {
+    try {
+        const { id, content } = req.body;
+        const document = await Document.findOneAndUpdate(
+            { _id: id, uid: req.user },
+            { content },
+            { new: true }
+        );
+        res.json(document);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+});
+
 module.exports = documentRouter;
