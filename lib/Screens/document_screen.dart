@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs/colors.dart';
 import 'package:google_docs/repository/document_repository.dart';
 import 'package:google_docs/repository/auth_repository.dart';
+import 'package:google_docs/models/document_model.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -25,6 +26,28 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   void initState() {
     super.initState();
     titleController.addListener(_onTitleChanged);
+    _loadDocument();
+  }
+
+  Future<void> _loadDocument() async {
+    final token = ref.read(userProvider)?.token;
+    if (token == null) return;
+
+    final errorModel = await ref.read(documentRepositoryProvider).getDocumentById(token, widget.id);
+    
+    if (errorModel.error == null && errorModel.data != null) {
+      if (mounted) {
+        setState(() {
+          titleController.text = errorModel.data.title;
+        });
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorModel.error ?? 'Failed to load document')),
+        );
+      }
+    }
   }
 
   void _onTitleChanged() {
