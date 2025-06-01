@@ -36,7 +36,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     _loadDocument();
     _setupSocketListeners();
 
-    socketRepository.changeListener((data)=> null);
+    socketRepository.changeListener((data) {
+      
+    });
   }
 
   void _setupSocketListeners() {
