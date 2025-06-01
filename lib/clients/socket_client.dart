@@ -10,8 +10,9 @@ class SocketClient {
   static SocketClient? _instance;
 
     SocketClient._internal() {
+    print('Initializing socket connection to: $host');
     socket = IO.io(
-      'http://192.168.56.1',
+      host,
       IO.OptionBuilder()
         .setTransports(['websocket']) // for Flutter compatibility
         .disableAutoConnect() // connect manually
@@ -19,7 +20,7 @@ class SocketClient {
     );
     
     socket!.onConnect((_) {
-      print('Socket connected successfully');
+      print('Socket connected successfully to $host');
     });
 
     socket!.onDisconnect((_) {
@@ -38,6 +39,10 @@ class SocketClient {
 
     socket!.onReconnectAttempt((attemptNumber) {
       print('Attempting to reconnect: $attemptNumber');
+    });
+
+    socket!.onConnectError((error) {
+      print('Connection error: $error');
     });
 
     socket!.connect();
